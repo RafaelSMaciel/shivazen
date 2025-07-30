@@ -1,0 +1,257 @@
+/* Hero Section */
+.hero-section {
+  position: relative;
+  margin-bottom: 60px;
+}
+
+.hero-image-container {
+  border-radius: 0 0 15px 15px;
+  overflow: hidden;
+}
+
+.hero-image {
+  width: 100%;
+  height: 70vh;
+  object-fit: cover;
+  object-position: center;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.3));
+}
+
+/* About Section */
+.about-section {
+  padding: 60px 0;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  position: relative;
+  display: inline-block;
+}
+
+.section-title:after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 4px;
+  background-color: var(--primary-color);
+  margin: 15px auto 0;
+}
+
+/* Gallery */
+.gallery-section {
+  padding: 40px 0;
+}
+
+.gallery-card {
+  position: relative;
+  overflow: hidden;
+  height: 350px;
+}
+
+.gallery-image {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.gallery-card:hover .gallery-image {
+  transform: scale(1.1);
+}
+
+.gallery-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 25px;
+  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+  color: white;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+}
+
+.gallery-card:hover .gallery-caption {
+  transform: translateY(0);
+}
+
+/* Tratamentos */
+.treatment-section {
+  padding: 60px 0;
+}
+
+.treatment-card {
+  padding: 30px;
+  text-align: center;
+  height: 100%;
+}
+
+.treatment-icon {
+  font-size: 2.5rem;
+  color: var(--primary-color);
+  margin-bottom: 20px;
+}
+
+/* Agendamento */
+.booking-container {
+  padding: 60px 0;
+}
+
+.time-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 15px;
+}
+
+.time-slot, .day-pill {
+  padding: 12px;
+  text-align: center;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.time-slot {
+  background-color: var(--secondary-color);
+  color: var(--text-dark);
+}
+
+.time-slot:hover, .time-slot.selected,
+.day-pill:hover, .day-pill.selected {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* Contato */
+.contact-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+}
+
+.contact-card, .contact-form {
+  padding: 40px;
+  height: 100%;
+}
+
+.info-item {
+  margin-bottom: 20px;
+}
+
+/* cabecalho */
+.cabecalho {
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+}
+
+/* Estilos para o botão de ícone */
+.btn-icon {
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  font-size: 1.5rem;
+  padding: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.btn-icon:hover {
+  color: var(--primary-dark);
+  transform: scale(1.1);
+}
+
+/* Ajustes para o menu desktop */
+.navbar-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-link {
+  color: var(--primary-color);
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  position: relative;
+}
+
+.nav-link:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--primary-color);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.nav-link:hover:after,
+.nav-link.active:after {
+  width: 70%;
+}
+
+/* Hero Section */
+.hero-section {
+  position: relative;
+  margin-bottom: 4rem;
+}
+
+.hero-image-container {
+  height: 80vh;
+  overflow: hidden;
+}
+
+.hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-content {
+  max-width: 800px;
+  padding: 0 2rem;
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  color: white;
+  margin-bottom: 1.5rem;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.hero-subtitle {
+  font-size: 1.5rem;
+  color: white;
+  margin-bottom: 2rem;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+.hero-actions {
+  display: flex;
+  justify-content: center;
+}

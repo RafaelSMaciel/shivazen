@@ -2,30 +2,27 @@
 {% load static %}
 
 {% block conteudo %}
-<link rel="stylesheet" href="{% static 'css/telas.css' %}">
-
-<div class="container sobre-nos py-5">
-  <!-- Cabeçalho Hero -->
+<div class="container py-5">
   <header class="hero-header text-center mb-5">
     <h1 class="display-4 mb-3">Shiva Zen</h1>
     <h2 class="mb-4">Clínica de Estética Avançada</h2>
-    <p class="lead mx-auto" style="max-width: 800px;">
+    <div class="divider mx-auto my-4"></div>
+    <p class="lead mx-auto">
       Na Shiva Zen, somos especialistas em tratamentos estéticos faciais e corporais que melhoram sua pele com técnicas avançadas, promovendo luminosidade e rejuvenescimento natural.
     </p>
   </header>
 
-  <!-- Tratamentos Faciais -->
   <section class="treatment-section mb-5">
-    <div class="treatment-header text-center mb-4">
+    <div class="text-center mb-5">
       <h3 class="section-title">Tratamentos Estético Faciais</h3>
       <div class="divider mx-auto"></div>
     </div>
     
-    <div class="row">
+    <div class="row g-4">
       {% for tratamento in tratamentos_faciais %}
-      <div class="col-md-6 col-lg-4 mb-4">
-        <div class="treatment-card h-100">
-          <div class="treatment-icon mb-3">
+      <div class="col-md-6 col-lg-4">
+        <div class="treatment-card card">
+          <div class="treatment-icon">
             <i class="fas fa-spa"></i>
           </div>
           <h4 class="treatment-name">{{ tratamento.nome }}</h4>
@@ -36,18 +33,17 @@
     </div>
   </section>
 
-  <!-- Tratamentos Corporais -->
   <section class="treatment-section">
-    <div class="treatment-header text-center mb-4">
+    <div class="text-center mb-5">
       <h3 class="section-title">Tratamentos Estético Corporal</h3>
       <div class="divider mx-auto"></div>
     </div>
     
-    <div class="row">
+    <div class="row g-4">
       {% for tratamento in tratamentos_corporais %}
-      <div class="col-md-6 col-lg-4 mb-4">
-        <div class="treatment-card h-100">
-          <div class="treatment-icon mb-3">
+      <div class="col-md-6 col-lg-4">
+        <div class="treatment-card card">
+          <div class="treatment-icon">
             <i class="fas fa-heartbeat"></i>
           </div>
           <h4 class="treatment-name">{{ tratamento.nome }}</h4>
@@ -58,5 +54,4 @@
     </div>
   </section>
 </div>
-
 {% endblock %}

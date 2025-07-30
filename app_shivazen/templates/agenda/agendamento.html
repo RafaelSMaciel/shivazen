@@ -2,69 +2,56 @@
 {% load static %}
 
 {% block conteudo %}
-<link rel="stylesheet" href="{% static 'css/telas.css' %}">
-
-<div class="container booking-container py-5">
-    <!-- Cabeçalho -->
-    <div class="booking-header text-center mb-5">
-        <h2 class="booking-title">Agende seu Procedimento</h2>
-        <div class="divider mx-auto"></div>
+<div class="booking-container py-5">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="booking-title">Agende seu Procedimento</h2>
+      <div class="divider mx-auto"></div>
     </div>
 
     <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <!-- Dias Disponíveis -->
-            <div class="booking-card mb-4 p-4">
-                <h3 class="section-subtitle mb-3">
-                    <i class="fas fa-calendar-alt me-2"></i> Dias Disponíveis
-                </h3>
-                <div class="days-container">
-                    <div class="day-pill">Segunda</div>
-                    <div class="day-pill">Terça</div>
-                    <div class="day-pill">Quarta</div>
-                    <div class="day-pill">Quinta</div>
-                    <div class="day-pill">Sexta</div>
-                </div>
-            </div>
-
-            <!-- Escolher Profissional -->
-            <div class="booking-card mb-4 p-4">
-                <h3 class="section-subtitle mb-3">
-                    <i class="fas fa-user-md me-2"></i> Escolha seu Profissional
-                </h3>
-                <select class="form-select professional-select">
-                    <option selected>Selecione um profissional</option>
-                    <option>Dra. Ana Silva</option>
-                    <option>Dr. Carlos Mendes</option>
-                    <option>Dra. Juliana Costa</option>
-                </select>
-            </div>
-
-            <!-- Horários Disponíveis -->
-            <div class="booking-card p-4">
-                <h3 class="section-subtitle mb-3">
-                    <i class="fas fa-clock me-2"></i> Horários Disponíveis
-                </h3>
-                <div class="time-grid">
-                    <div class="time-slot">09:00</div>
-                    <div class="time-slot">10:00</div>
-                    <div class="time-slot">11:00</div>
-                    <div class="time-slot">12:00</div>
-                    <div class="time-slot">13:00</div>
-                    <div class="time-slot">14:00</div>
-                    <div class="time-slot">15:00</div>
-                    <div class="time-slot">16:00</div>
-                    <div class="time-slot">17:00</div>
-                </div>
-            </div>
-
-            <!-- Botão de Confirmação -->
-            <div class="text-center mt-4">
-                <a href="{% url 'shivazen:usuarioLogin' %}" class="btn-confirm">
-                  Confirmar Agendamento <i class="fas fa-check-circle ms-2"></i>
-                </a>
-            </div>
+      <div class="col-lg-8">
+        <div class="booking-card card mb-4 p-4">
+          <h3 class="section-subtitle">
+            <i class="fas fa-calendar-alt me-2"></i> Dias Disponíveis
+          </h3>
+          <div class="days-container mt-3">
+            {% for dia in dias_disponiveis %}
+            <div class="day-pill">{{ dia }}</div>
+            {% endfor %}
+          </div>
         </div>
+
+        <div class="booking-card card mb-4 p-4">
+          <h3 class="section-subtitle">
+            <i class="fas fa-user-md me-2"></i> Profissional
+          </h3>
+          <select class="form-control mt-3">
+            <option selected>Selecione um profissional</option>
+            {% for prof in profissionais %}
+            <option value="{{ prof.id }}">{{ prof.nome }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="booking-card card p-4">
+          <h3 class="section-subtitle">
+            <i class="fas fa-clock me-2"></i> Horários
+          </h3>
+          <div class="time-grid mt-3">
+            {% for horario in horarios %}
+            <div class="time-slot">{{ horario }}</div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="text-center mt-5">
+          <a href="{% url 'shivazen:usuarioLogin' %}" class="btn btn-primary btn-lg">
+            Confirmar Agendamento <i class="fas fa-check-circle ms-2"></i>
+          </a>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 {% endblock %}

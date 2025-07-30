@@ -1,62 +1,66 @@
 {% extends 'estrutura/base.html' %}
 {% block conteudo %}
 <div class="container my-5">
-    <div class="row">
-        <div class="col-md-6">
-            <div class="contact-card p-4 shadow-sm">
-                <h2 class="contact-title mb-4">Entre em Contato</h2>
-                <p class="contact-text">Estamos à disposição para tirar suas dúvidas, agendar procedimentos ou receber seus feedbacks.</p>
-                
-                <div class="contact-info mt-4">
-                    <div class="info-item mb-3">
-                        <i class="fas fa-phone-alt contact-icon"></i>
-                        <span class="ms-2">(XX) XXXX-XXXX</span>
-                    </div>
-                    <div class="info-item mb-3">
-                        <i class="fas fa-whatsapp contact-icon"></i>
-                        <span class="ms-2">(XX) XXXXX-XXXX (WhatsApp)</span>
-                    </div>
-                    <div class="info-item mb-3">
-                        <i class="fas fa-envelope contact-icon"></i>
-                        <span class="ms-2">contato@shivazen.com.br</span>
-                    </div>
-                    <div class="info-item">
-                        <i class="fas fa-map-marker-alt contact-icon"></i>
-                        <span class="ms-2">Av. Exemplo, 1234 - Centro, Sua Cidade - SP</span>
-                    </div>
-                </div>
+  <div class="row g-4">
+    <div class="col-md-6">
+      <div class="contact-card card h-100">
+        <div class="card-body p-4">
+          <h2 class="contact-title mb-4">Entre em Contato</h2>
+          <p class="contact-text">Estamos à disposição para tirar suas dúvidas, agendar procedimentos ou receber seus feedbacks.</p>
+          
+          <div class="contact-info mt-4">
+            <div class="info-item mb-3">
+              <i class="fas fa-phone-alt contact-icon"></i>
+              <span>(XX) XXXX-XXXX</span>
+            </div>
+            <div class="info-item mb-3">
+              <i class="fab fa-whatsapp contact-icon"></i>
+              <span>(XX) XXXXX-XXXX</span>
+            </div>
+            <div class="info-item mb-3">
+              <i class="fas fa-envelope contact-icon"></i>
+              <span>contato@shivazen.com.br</span>
+            </div>
+            <div class="info-item">
+              <i class="fas fa-map-marker-alt contact-icon"></i>
+              <span>Av. Exemplo, 1234 - Centro, Sua Cidade - SP</span>
+            </div>
+          </div>
 
-                <div class="contact-hours mt-5 pt-3">  <!-- Aumentei o margin-top -->
-                    <h5 class="mb-3">Horário de Funcionamento:</h5>
-                    <p>Segunda a Sexta: 09h às 19h</p>
-                    <p>Sábado: 09h às 14h</p>
-                    <p>Domingo: Fechado</p>
-                </div>
-            </div>
+          <div class="contact-hours mt-5">
+            <h5 class="mb-3">Horário de Funcionamento:</h5>
+            <p>Segunda a Sexta: 09h às 19h</p>
+            <p>Sábado: 09h às 14h</p>
+            <p>Domingo: Fechado</p>
+          </div>
         </div>
-        
-        <div class="col-md-6">
-            <div class="contact-form p-4 shadow-sm">
-                <h3 class="form-title mb-4">Envie sua Mensagem</h3>
-                <form>
-                    <div class="mb-4">  <!-- Aumentei o margin-bottom -->
-                        <input type="text" class="form-control input-custom" placeholder="Seu Nome" required>
-                    </div>
-                    <div class="mb-4">  <!-- Aumentei o margin-bottom -->
-                        <input type="email" class="form-control input-custom" placeholder="Seu E-mail" required>
-                    </div>
-                    <div class="mb-4">  <!-- Aumentei o margin-bottom -->
-                        <input type="tel" class="form-control input-custom" placeholder="Seu Telefone">
-                    </div>
-                    <div class="mb-4">  <!-- Aumentei o margin-bottom -->
-                        <textarea class="form-control input-custom" rows="5" placeholder="Sua Mensagem" required></textarea>
-                    </div>
-                    <div class="mt-4 pt-2">  <!-- Adicionei margem superior -->
-                        <button type="submit" class="btn btn-contact">Enviar Mensagem</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+      </div>
     </div>
+    
+    <div class="col-md-6">
+      <div class="contact-form card h-100">
+        <div class="card-body p-4">
+          <h3 class="form-title mb-4">Envie sua Mensagem</h3>
+          <form>
+            <div class="mb-4">
+              <input type="text" class="form-control" placeholder="Seu Nome" required>
+            </div>
+            <div class="mb-4">
+              <input type="email" class="form-control" placeholder="Seu E-mail" required>
+            </div>
+            <div class="mb-4">
+              <input type="tel" class="form-control" placeholder="Seu Telefone">
+            </div>
+            <div class="mb-4">
+              <textarea class="form-control" rows="5" placeholder="Sua Mensagem" required></textarea>
+            </div>
+            <div class="mt-4">
+              <button type="submit" class="btn btn-primary w-100">Enviar Mensagem</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

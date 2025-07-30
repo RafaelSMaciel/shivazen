@@ -3,17 +3,22 @@ from . import views
 from django.conf import settings
 from django.conf.urls.static import static
 
-app_name = 'shivazen'  # Adicione esta linha para o namespace
+app_name = 'shivazen'
 
 urlpatterns = [
-    path('', views.home, name='inicio'),  # URL raiz agora aponta para home
-    path('agenda/agendamento/', views.agendaCadastro, name='agendaCadastro'),
-    path('agenda/contato/', views.agendaContato, name='agendaContato'),
+#inicio
+    path('', views.home, name='inicio'),
+    path('inicio/quemsomos/', views.quemsomos, name='quemsomos'),
+    path('inicio/termosUso/', views.termosUso, name='termosUso'),
+    path('inicio/politicaPrivacidade/', views.politicaPrivacidade, name='politicaPrivacidade'),
+#usuario
     path('usuario/cadastro/', views.usuarioCadastro, name='usuarioCadastro'),
     path('usuario/login/', views.usuarioLogin, name='usuarioLogin'),
     path('usuario/esqueciSenha/', views.esqueciSenha, name='esqueciSenha'),
-    path('inicio/quemsomos/', views.quemsomos, name='quemsomos'),
-
+#agenda
+    path('agenda/agendamento/', views.agendaCadastro, name='agendaCadastro'),
+    path('agenda/contato/', views.agendaContato, name='agendaContato'),
+#telas
     path('telas/ProntuarioConsentimento/', views.prontuarioconsentimento, name='prontuarioconsentimento'),
     path('telas/tela_cadastro_profissional/', views.profissionalCadastro, name='profissionalCadastro'),
     path('telas/tela_editar_profissional/', views.profissionalEditar, name='profissionalEditar'),

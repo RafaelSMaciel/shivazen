@@ -1,22 +1,14 @@
 from django.shortcuts import render
 
+#inicio
 def home(request):
     return render(request, 'inicio/home.html')
 
-def usuarioLogin(request):
-    return render(request, 'usuario/login.html')
+def termosUso(request):
+    return render(request, 'inicio/termosUso.html')
 
-def usuarioCadastro(request):
-    return render(request, 'usuario/cadastro.html')  
-
-def esqueciSenha(request):
-    return render(request, 'usuario/esqueciSenha.html')  
-
-def agendaCadastro(request):
-    return render(request, 'agenda/agendamento.html')
-
-def agendaContato(request):
-    return render(request, 'agenda/contato.html')
+def politicaPrivacidade(request):
+    return render(request, 'inicio/politicaPrivacidade.html')
 
 def quemsomos(request):
     tratamentos_faciais = [
@@ -34,6 +26,24 @@ def quemsomos(request):
         'tratamentos_corporais': tratamentos_corporais
     })
 
+#usuario
+def usuarioLogin(request):
+    return render(request, 'usuario/login.html')
+
+def usuarioCadastro(request):
+    return render(request, 'usuario/cadastro.html')  
+
+def esqueciSenha(request):
+    return render(request, 'usuario/esqueciSenha.html')  
+
+#agenda
+def agendaCadastro(request):
+    return render(request, 'agenda/agendamento.html')
+
+def agendaContato(request):
+    return render(request, 'agenda/contato.html')
+
+#telas
 def prontuarioconsentimento(request):
     return render(request, 'telas/ProntuarioConsentimento.html') 
 

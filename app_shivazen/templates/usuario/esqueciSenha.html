@@ -11,7 +11,10 @@
               <a href="{% url 'shivazen:inicio' %}">
                 <img src="{% static 'assents/LogoCompletaSemFundo.png' %}" alt="Shiva Zen" class="login-logo">
               </a>
-              <h2 class="title">Acesse sua conta</h2>
+              <h2 class="title">Recuperar senha</h2>
+              <div class="cadastro-footer mt-4">
+                <p>Preencha o campo abaixo e enviaremos instruções para você redefinir sua senha por e-mail ou sms.</a></p>
+              </div>
             </div>
             
             <div class="login-body">
@@ -19,27 +22,15 @@
                 {% csrf_token %}
                 <div class="mb-4">
                   <label for="login" class="form-label">E-mail ou CPF</label>
-                  <input type="text" id="login" name="login" class="form-control" placeholder="Digite seu e-mail ou CPF" required>
-                </div>
-                
-                <div class="mb-4">
-                  <label for="senha" class="form-label">Senha</label>
-                  <input type="password" id="senha" name="senha" class="form-control" placeholder="Digite sua senha" required>
-                  <div class="text-end mt-2">
-                    <a href="{% url 'shivazen:esqueciSenha' %}" class="text-muted small">Esqueceu sua senha?</a>
-                  </div>
+                  <input type="text" id="login" name="login" class="form-control" placeholder="Digite seu e-mail ou Celular" required>
                 </div>
                 
                 <div class="d-grid gap-3">
                   <button type="submit" class="btn btn-primary">
-                    Entrar
+                    Solicitar código
                   </button>
                 </div>
               </form>
-              
-              <div class="texto-footer mt-4">
-                <p>Ainda não tem conta? <a href="{% url 'shivazen:usuarioCadastro' %}">Cadastre-se</a></p>
-              </div>
             </div>
           </div>
         </div>

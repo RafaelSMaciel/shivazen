@@ -11,6 +11,7 @@ urlpatterns = [
     path('agenda/contato/', views.agendaContato, name='agendaContato'),
     path('usuario/cadastro/', views.usuarioCadastro, name='usuarioCadastro'),
     path('usuario/login/', views.usuarioLogin, name='usuarioLogin'),
+    path('usuario/esqueciSenha/', views.esqueciSenha, name='esqueciSenha'),
     path('inicio/quemsomos/', views.quemsomos, name='quemsomos'),
 
     path('telas/ProntuarioConsentimento/', views.prontuarioconsentimento, name='prontuarioconsentimento'),

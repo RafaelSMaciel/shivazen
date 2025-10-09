@@ -5,7 +5,7 @@
     // para parar aplicação selecionar o quadradinho vermelho.
 * localhost: 'http://127.0.0.1:8000/'
 
-//
+// // 
 Realizar merge 
 atualizar sua branch de main com a nuvem.
 * git branch // saber qual branch você esta

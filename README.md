@@ -1,4 +1,4 @@
-﻿"Shivazen: Clinica Estetica"
+﻿  "Shivazen: Clinica Estetica"
 
 * rodar aplicação pelo terminal: 'python .\manage.py runserver'
 * rodar aplicação pelo VsCode: Run and Debug (Crtl+Shift+D) selecionar 'Debuggando' ou (Crtl+F5) 

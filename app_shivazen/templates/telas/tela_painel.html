@@ -1,187 +1,36 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Cadastro - Shiva Zen</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #f4efeb;
-    }
+{% extends 'estrutura/base.html' %}
+{% load static %}
 
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 20px 50px;
-      background-color: #f4efeb;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-    }
-
-    .logo img {
-      height: 80px;
-      margin-right: 15px;
-    }
-
-    .logo-text {
-      font-size: 24px;
-      font-weight: bold;
-      color: #9e4d16;
-    }
-
-    .sub-logo {
-      font-size: 16px;
-      color: #8e5b00;
-      margin-top: -10px;
-    }
-
-    nav a {
-      margin: 0 15px;
-      text-decoration: none;
-      color: #a1713f;
-      font-weight: bold;
-    }
-
-    nav a.active {
-      color: #8b5c00;
-    }
-
-    .divider {
-      border-top: 2px solid #d8b893;
-    }
-
-    .container {
-      display: flex;
-      justify-content: space-between;
-      padding: 60px 80px;
-    }
-
-    .left {
-      width: 45%;
-    }
-
-    .left h2 {
-      font-size: 32px;
-      color: #2d1a15;
-    }
-
-    .left p {
-      font-size: 16px;
-      color: #444;
-      margin-top: 10px;
-    }
-
-    .left em {
-      color: #666;
-    }
-
-    .left b {
-      display: block;
-      margin-top: 20px;
-      font-size: 18px;
-    }
-
-    .right {
-      width: 45%;
-    }
-
-    .form-group {
-      margin-bottom: 15px;
-    }
-
-    .form-group input,
-    .form-group textarea {
-      width: 100%;
-      padding: 14px;
-      background-color: #f7e0b6;
-      border: none;
-      font-size: 16px;
-      color: #4a2e00;
-      resize: none;
-    }
-
-    .form-group textarea {
-      height: 100px;
-    }
-
-    .form-group input::placeholder,
-    .form-group textarea::placeholder {
-      color: #9e7e3b;
-      font-weight: bold;
-    }
-
-    .btn {
-      display: inline-block;
-      background-color: #f7e0b6;
-      color: #9e7e3b;
-      font-weight: bold;
-      border: none;
-      padding: 12px 30px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 16px;
-      margin-top: 10px;
-    }
-
-    .btn:hover {
-      background-color: #f5d49f;
-    }
-  </style>
-</head>
-<body>
-
-  <header>
-    <div class="logo">
-      <img src="logo.png" alt="Logo Shiva Zen">
-      <div>
-        <div class="logo-text">Shiva Zen</div>
-        <div class="sub-logo">Clínica de Estética Avançada</div>
-      </div>
-    </div>
-    <nav>
-      <a href="#">INÍCIO</a>
-      <a href="#">LOGIN</a>
-      <a href="#">AGENDAMENTOS</a>
-      <a href="#" class="active">CADASTRO</a>
-      <a href="#">CONTATO</a>
-    </nav>
-  </header>
-
-  <div class="divider"></div>
-
-  <div class="container">
-    <div class="left">
-      <h2>Contact</h2>
-      <p><em>Please fill out the form below to send us an email.</em></p>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-      <b>E-mail:</b>
-      <p>hello@reallygreatsite.com</p>
+{% block conteudo %}
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h2 class="booking-title">Painel do Usuário</h2>
+        <p class="lead">Bem-vindo(a), {{ request.session.usuario_nome }}!</p>
+        <div class="divider mx-auto"></div>
     </div>
 
-    <div class="right">
-      <form>
-        <div class="form-group">
-          <input type="text" placeholder="NOME COMPLETO:" required>
+    <div class="row justify-content-center g-4">
+        <div class="col-md-6 col-lg-4">
+            <div class="card text-center h-100">
+                <div class="card-body d-flex flex-column justify-content-center">
+                    <i class="fas fa-calendar-alt fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">Agendamentos</h5>
+                    <p class="card-text">Visualize seu histórico e realize novos agendamentos.</p>
+                    <a href="{% url 'shivazen:agendaCadastro' %}" class="btn btn-primary mt-auto">Agendar Novo</a>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-          <input type="email" placeholder="E-MAIL:" required>
-        </div>
-        <div class="form-group">
-          <input type="date" placeholder="DATA DE NASCIMENTO:" required>
-        </div>
-        <div class="form-group">
-          <textarea placeholder="MESSAGE"></textarea>
-        </div>
-        <button class="btn" type="submit">ENVIAR</button>
-      </form>
-    </div>
-  </div>
 
-</body>
-</html>
+        <div class="col-md-6 col-lg-4">
+            <div class="card text-center h-100">
+                <div class="card-body d-flex flex-column justify-content-center">
+                    <i class="fas fa-file-medical fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">Meu Prontuário</h5>
+                    <p class="card-text">Acesse suas informações de saúde e termos de consentimento.</p>
+                    <a href="{% url 'shivazen:prontuarioconsentimento' %}" class="btn btn-outline mt-auto">Ver Prontuário</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

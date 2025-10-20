@@ -11,47 +11,131 @@
 
     <div class="row justify-content-center">
       <div class="col-lg-8">
-        <div class="booking-card card mb-4 p-4">
-          <h3 class="section-subtitle">
-            <i class="fas fa-calendar-alt me-2"></i> Dias Disponíveis
-          </h3>
-          <div class="days-container mt-3">
-            {% for dia in dias_disponiveis %}
-            <div class="day-pill">{{ dia }}</div>
-            {% endfor %}
+        <form id="agendamento-form" method="POST" action="{% url 'shivazen:agendaCadastro' %}">
+          {% csrf_token %}
+          {% if messages %}{% for message in messages %}<div class="alert alert-{{ message.tags }} mb-4" role="alert">{{ message }}</div>{% endfor %}{% endif %}
+
+          <div class="booking-card card mb-4 p-4">
+            <h3 class="section-subtitle"><i class="fas fa-user-md me-2"></i> 1. Escolha o Profissional</h3>
+            <select id="select-profissional" name="profissional" class="form-control mt-3" required>
+              <option value="" selected disabled>Selecione um profissional...</option>
+              {% for prof in profissionais %}<option value="{{ prof.id_profissional }}">{{ prof.nome }}</option>{% endfor %}
+            </select>
           </div>
-        </div>
 
-        <div class="booking-card card mb-4 p-4">
-          <h3 class="section-subtitle">
-            <i class="fas fa-user-md me-2"></i> Profissional
-          </h3>
-          <select class="form-control mt-3">
-            <option selected>Selecione um profissional</option>
-            {% for prof in profissionais %}
-            <option value="{{ prof.id }}">{{ prof.nome }}</option>
-            {% endfor %}
-          </select>
-        </div>
-
-        <div class="booking-card card p-4">
-          <h3 class="section-subtitle">
-            <i class="fas fa-clock me-2"></i> Horários
-          </h3>
-          <div class="time-grid mt-3">
-            {% for horario in horarios %}
-            <div class="time-slot">{{ horario }}</div>
-            {% endfor %}
+          <div id="procedimentos-card" class="booking-card card mb-4 p-4" style="display: none;">
+            <h3 class="section-subtitle"><i class="fas fa-spa me-2"></i> 2. Escolha o Procedimento</h3>
+            <select id="select-procedimento" name="procedimento" class="form-control mt-3" required></select>
           </div>
-        </div>
 
-        <div class="text-center mt-5">
-          <a href="{% url 'shivazen:usuarioLogin' %}" class="btn btn-primary btn-lg">
-            Confirmar Agendamento <i class="fas fa-check-circle ms-2"></i>
-          </a>
-        </div>
+          <div id="data-card" class="booking-card card mb-4 p-4" style="display: none;">
+            <h3 class="section-subtitle"><i class="fas fa-calendar-alt me-2"></i> 3. Escolha a Data</h3>
+            <input type="date" id="select-data" name="data" class="form-control mt-3" required>
+          </div>
+
+          <div id="horarios-card" class="booking-card card p-4" style="display: none;">
+            <h3 class="section-subtitle"><i class="fas fa-clock me-2"></i> 4. Escolha o Horário</h3>
+            <div id="time-grid" class="time-grid mt-3"><p class="text-muted">Selecione uma data para ver os horários.</p></div>
+          </div>
+          
+          <input type="hidden" id="horario_selecionado" name="horario_selecionado">
+
+          <div class="text-center mt-5">
+            <button id="btn-confirmar" type="submit" class="btn btn-primary btn-lg" disabled>Confirmar Agendamento</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const profissionalSelect = document.getElementById('select-profissional');
+    const procedimentoCard = document.getElementById('procedimentos-card');
+    const procedimentoSelect = document.getElementById('select-procedimento');
+    const dataCard = document.getElementById('data-card');
+    const dataSelect = document.getElementById('select-data');
+    const horariosCard = document.getElementById('horarios-card');
+    const timeGrid = document.getElementById('time-grid');
+    const btnConfirmar = document.getElementById('btn-confirmar');
+    const hiddenHorarioInput = document.getElementById('horario_selecionado');
+    const csrfToken = document.querySelector('input[name=csrfmiddlewaretoken]').value;
+
+    function resetAllAfterProfissional() {
+        procedimentoSelect.innerHTML = '';
+        procedimentoCard.style.display = 'none';
+        dataCard.style.display = 'none';
+        horariosCard.style.display = 'none';
+        btnConfirmar.disabled = true;
+    }
+
+    profissionalSelect.addEventListener('change', function() {
+        const idProfissional = this.value;
+        resetAllAfterProfissional();
+        if (!idProfissional) return;
+
+        fetch("{% url 'shivazen:buscar_procedimentos' %}", {
+            method: 'POST',
+            headers: { 'X-CSRFToken': csrfToken, 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `id_profissional=${idProfissional}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            procedimentoSelect.innerHTML = '<option value="" selected disabled>Selecione um procedimento...</option>';
+            data.forEach(proc => procedimentoSelect.add(new Option(proc.nome, proc.id_procedimento)));
+            procedimentoCard.style.display = 'block';
+        });
+    });
+
+    procedimentoSelect.addEventListener('change', function() {
+        dataCard.style.display = this.value ? 'block' : 'none';
+        horariosCard.style.display = 'none';
+        btnConfirmar.disabled = true;
+    });
+
+    dataSelect.addEventListener('change', function() {
+        const idProfissional = profissionalSelect.value;
+        const data = this.value;
+        horariosCard.style.display = 'none';
+        btnConfirmar.disabled = true;
+        if (!idProfissional || !data) return;
+
+        horariosCard.style.display = 'block';
+        timeGrid.innerHTML = '<p class="text-muted">Carregando...</p>';
+
+        fetch("{% url 'shivazen:buscar_horarios' %}", {
+            method: 'POST',
+            headers: { 'X-CSRFToken': csrfToken, 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `id_profissional=${idProfissional}&data=${data}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            timeGrid.innerHTML = '';
+            if (data.horarios && data.horarios.length > 0) {
+                data.horarios.forEach(horario => {
+                    const slot = document.createElement('div');
+                    slot.className = 'time-slot';
+                    slot.textContent = horario;
+                    slot.dataset.datetime = `${dataSelect.value}T${horario}:00`;
+                    timeGrid.appendChild(slot);
+                });
+            } else {
+                timeGrid.innerHTML = '<p class="text-muted">Nenhum horário disponível.</p>';
+            }
+        });
+    });
+
+    timeGrid.addEventListener('click', function(e) {
+        if (e.target.classList.contains('time-slot')) {
+            document.querySelectorAll('.time-slot.selected').forEach(el => el.classList.remove('selected'));
+            e.target.classList.add('selected');
+            hiddenHorarioInput.value = e.target.dataset.datetime;
+            btnConfirmar.disabled = false;
+        }
+    });
+});
+</script>
 {% endblock %}

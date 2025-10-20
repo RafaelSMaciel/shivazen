@@ -1,28 +1,31 @@
+# app_shivazen/urls.py
 from django.urls import path
 from . import views
-from django.conf import settings
-from django.conf.urls.static import static
 
 app_name = 'shivazen'
 
 urlpatterns = [
-#inicio
+    # --- Rotas Abertas (Públicas) ---
     path('', views.home, name='inicio'),
-    path('inicio/quemsomos/', views.quemsomos, name='quemsomos'),
-    path('inicio/termosUso/', views.termosUso, name='termosUso'),
-    path('inicio/politicaPrivacidade/', views.politicaPrivacidade, name='politicaPrivacidade'),
-#usuario
-    path('usuario/cadastro/', views.usuarioCadastro, name='usuarioCadastro'),
-    path('usuario/login/', views.usuarioLogin, name='usuarioLogin'),
-    path('usuario/esqueciSenha/', views.esqueciSenha, name='esqueciSenha'),
-#agenda
-    path('agenda/agendamento/', views.agendaCadastro, name='agendaCadastro'),
-    path('agenda/contato/', views.agendaContato, name='agendaContato'),
-#telas
-    path('telas/ProntuarioConsentimento/', views.prontuarioconsentimento, name='prontuarioconsentimento'),
-    path('telas/tela_cadastro_profissional/', views.profissionalCadastro, name='profissionalCadastro'),
-    path('telas/tela_editar_profissional/', views.profissionalEditar, name='profissionalEditar'),
-    path('telas/tela_login/', views.login, name='login'),
-    path('telas/tela_painel/', views.painel, name='painel'),
-                        
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    path('quemsomos/', views.quemsomos, name='quemsomos'),
+    path('termos-de-uso/', views.termosUso, name='termosUso'),
+    path('politica-de-privacidade/', views.politicaPrivacidade, name='politicaPrivacidade'),
+    path('contato/', views.agendaContato, name='agendaContato'),
+
+    # --- Rotas de Autenticação ---
+    path('cadastro/', views.usuarioCadastro, name='usuarioCadastro'),
+    path('login/', views.usuarioLogin, name='usuarioLogin'),
+    path('logout/', views.usuarioLogout, name='usuarioLogout'),
+    path('esqueci-senha/', views.esqueciSenha, name='esqueciSenha'),
+
+    # --- Rotas da Área Restrita (Painel do Cliente/Admin) ---
+    path('painel/', views.painel, name='painel'),
+    path('painel/agendamento/', views.agendaCadastro, name='agendaCadastro'),
+    path('painel/prontuario/', views.prontuarioconsentimento, name='prontuarioconsentimento'),
+    path('painel/cadastrar-profissional/', views.profissionalCadastro, name='profissionalCadastro'),
+    path('painel/editar-profissional/', views.profissionalEditar, name='profissionalEditar'),
+
+    # --- Rotas para chamadas AJAX do agendamento ---
+    path('ajax/buscar-procedimentos/', views.buscar_procedimentos, name='buscar_procedimentos'),
+    path('ajax/buscar-horarios/', views.buscar_horarios, name='buscar_horarios'),
+]

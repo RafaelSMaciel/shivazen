@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from .models import Profissional, DisponibilidadeProfissional 
 #inicio
 def home(request):
     return render(request, 'inicio/home.html')
@@ -36,9 +36,22 @@ def usuarioCadastro(request):
 def esqueciSenha(request):
     return render(request, 'usuario/esqueciSenha.html')  
 
-#agenda
+# agenda
 def agendaCadastro(request):
-    return render(request, 'agenda/agendamento.html')
+    # Aqui você busca os dados REAIS do banco de dados
+    profissionais_ativos = Profissional.objects.filter(ativo=True)
+
+    # Lógica para dias e horários (exemplo simples)
+    dias_disponiveis_exemplo = ["Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira"]
+    horarios_exemplo = ["09:00", "10:00", "11:00", "14:00", "15:00", "16:00"]
+
+    context = {
+        'profissionais': profissionais_ativos,
+        'dias_disponiveis': dias_disponiveis_exemplo,
+        'horarios': horarios_exemplo,
+    }
+
+    return render(request, 'agenda/agendamento.html', context)
 
 def agendaContato(request):
     return render(request, 'agenda/contato.html')

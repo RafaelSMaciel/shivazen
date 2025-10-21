@@ -1,0 +1,64 @@
+/* app_shivazen/static/css/admin_custom.css */
+
+:root {
+    --primary-color: #b48c4c;
+    --primary-dark: #8b5c00;
+    --background-light: #fdf6f0;
+    --text-dark: #5c4b2b;
+}
+
+/* Cabeçalho Principal */
+#header {
+    background-color: var(--primary-dark);
+    color: #fff;
+}
+
+#header a:link, #header a:visited {
+    color: #fff;
+}
+
+#branding h1, #branding h1 a, #branding h1 a:hover {
+    color: #fff;
+}
+
+/* Títulos dos Módulos (Apps) */
+.module h2, .module caption, .inline-group h2 {
+    background-color: var(--background-light);
+    color: var(--primary-dark);
+}
+
+/* Botões e Links de Ação */
+.button, input[type=submit], input[type=button], .submit-row input, a.button {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+.button:hover, input[type=submit]:hover, input[type=button]:hover, .submit-row input:hover, a.button:hover {
+    background-color: var(--primary-dark);
+}
+
+.button.default, input[type=submit].default, .submit-row input.default {
+    background-color: var(--text-dark);
+}
+.button.default:hover, input[type=submit].default:hover, .submit-row input.default:hover {
+    background-color: #444;
+}
+
+/* Cor dos links principais */
+a:link, a:visited {
+    color: var(--primary-color);
+}
+
+a:hover {
+    color: var(--primary-dark);
+}
+
+/* Foco em campos de formulário */
+input:focus, textarea:focus, select:focus {
+    border-color: var(--primary-color) !important;
+}
+
+/* Breadcrumbs */
+.breadcrumbs {
+    background-color: var(--background-light);
+}

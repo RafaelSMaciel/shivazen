@@ -2,7 +2,37 @@
 import os
 from pathlib import Path
 
+
+
+
+
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+STATIC_URL = '/static/'
+
+# Pasta onde o Django procura seus arquivos estáticos durante o desenvolvimento
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'app_shivazen/static')
+]
+
+# Pasta para onde o Django vai copiar TODOS os arquivos estáticos para produção
+# Adicione esta linha:
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# shivazen/settings.py
+INSTALLED_APPS = [
+    'jazzmin', 
+    'app_shivazen',
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+]
+
+
 
 SECRET_KEY = 'django-insecure-3zv0f3g^s$gtfqet^@+*ws5+kg_6x@ez_42x5vg7a$=2g*ru@j'
 
@@ -10,15 +40,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'app_shivazen',
-]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -79,3 +100,70 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'app_shivazen/static')]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Shiva Zen Admin",
+    "site_header": "Shiva Zen",
+    "site_brand": "Shiva Zen Admin",
+    "login_logo": "assents/LogoCompletaSemFundo.png",
+    "site_logo": "assents/LogoSemFundo.png",
+    "welcome_sign": "Bem-vindo à Administração da Shiva Zen",
+    "copyright": "Shiva Zen Ltda",
+
+    # Links no topo
+    "topmenu_links": [
+        {"name": "Voltar ao Site",  "url": "shivazen:inicio", "new_window": True},
+        {"model": "app_shivazen.Usuario", "name": "Usuários do Sistema"},
+    ],
+
+    ############# NOVO: MENU LATERAL ORGANIZADO #############
+    "navigation": [
+        {"name": "PRINCIPAL", "icon": "fas fa-tachometer-alt"},
+        {"name": "Agenda", "icon": "fas fa-calendar-alt", "models": [
+            {"model": "app_shivazen.atendimento", "label": "Ver Agendamentos", "icon": "fas fa-calendar-check"},
+            {"model": "app_shivazen.disponibilidadeprofissional", "label": "Disponibilidades", "icon": "fas fa-clock"},
+            {"model": "app_shivazen.bloqueioagenda", "label": "Bloqueios de Agenda", "icon": "fas fa-calendar-times"},
+        ]},
+        {"name": "Cadastros", "icon": "fas fa-edit", "models": [
+            {"model": "app_shivazen.cliente", "label": "Clientes", "icon": "fas fa-address-book"},
+            {"model": "app_shivazen.profissional", "label": "Profissionais", "icon": "fas fa-user-md"},
+            {"model": "app_shivazen.procedimento", "label": "Procedimentos", "icon": "fas fa-spa"},
+            {"model": "app_shivazen.preco", "label": "Tabela de Preços"},
+        ]},
+        {"name": "Configurações", "icon": "fas fa-cogs", "models": [
+            {"name": "Perguntas do Prontuário", "model": "app_shivazen.prontuariopergunta", "icon": "fas fa-question-circle"},
+            {"label": "Administração do Site", "icon": "fas fa-tools", "models": [
+                {"name": "Usuários (Sistema)", "model": "app_shivazen.usuario", "icon": "fas fa-user-shield"},
+                {"name": "Perfis de Acesso", "model": "app_shivazen.perfil", "icon": "fas fa-id-card"},
+                {"name": "Funcionalidades", "model": "app_shivazen.funcionalidade", "icon": "fas fa-key"},
+                {"name": "Logs de Auditoria", "model": "app_shivazen.logauditoria", "icon": "fas fa-history"},
+                {"name": "Usuários (Django Auth)", "model": "auth.user", "icon": "fas fa-user-lock"},
+                {"name": "Grupos (Django Auth)", "model": "auth.group", "icon": "fas fa-users"},
+            ]},
+        ]},
+    ],
+    #######################################################
+
+    # Ícones para apps que não estão no menu customizado (fallback)
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+        "auth.Group": "fas fa-users",
+    },
+}
+
+# Configurações de UI (pode manter as mesmas)
+JAZZMIN_UI_TWEAKS = {
+    "theme": "flatly",
+    "dark_theme": "darkly",
+    "brand_colour": "#8b5c00",
+    "accent": "#b48c4c",
+    "navbar": "navbar-white navbar-light",
+    "navbar_fixed": True,
+    "sidebar_fixed": True,
+    "sidebar": "sidebar-dark-primary",
+    "sidebar_nav_child_indent": True,
+    "sidebar_nav_compact_style": True,
+    "actions_sticky_top": True,
+    "theme_switcher": True
+}

@@ -57,31 +57,24 @@ def usuarioLogin(request):
         senha = request.POST.get('senha')
         usuario = None
         try:
-            # Tenta autenticar tanto como um usuário do sistema (admin/recepção) quanto como cliente
             if '@' in login_identifier:
                 usuario = Usuario.objects.get(email=login_identifier)
             else:
-                # Se não for um email, pode ser um CPF de cliente ou um nome de usuário de admin
                 try:
                     cliente = Cliente.objects.get(cpf=login_identifier)
                     usuario = Usuario.objects.get(email=cliente.email)
                 except (Cliente.DoesNotExist, Usuario.DoesNotExist):
-                     # Se não for CPF de cliente, pode ser um nome de usuário do admin do Django
                     from django.contrib.auth.models import User
                     try:
                         django_user = User.objects.get(username=login_identifier)
-                        usuario = Usuario.objects.get(email=django_user.email) # Assumindo que o email é o mesmo
+                        usuario = Usuario.objects.get(email=django_user.email)
                     except (User.DoesNotExist, Usuario.DoesNotExist):
                         raise Usuario.DoesNotExist
-
         except (Usuario.DoesNotExist, Cliente.DoesNotExist):
             messages.error(request, 'Usuário não encontrado.')
             return redirect('shivazen:usuarioLogin')
 
-        # Verifica se a senha está correta
         senha_valida = check_password(senha, usuario.senha_hash)
-
-        # Para superusuários, também verifica a senha do sistema Django
         if not senha_valida:
             try:
                 from django.contrib.auth.models import User
@@ -96,22 +89,18 @@ def usuarioLogin(request):
             request.session['usuario_nome'] = usuario.nome
             request.session['usuario_perfil'] = usuario.perfil.nome
             
-            # *** LÓGICA DE REDIRECIONAMENTO ***
             if usuario.perfil.nome in ['Administrador', 'Recepcionista', 'Profissional']:
-                # Se for um perfil administrativo, redireciona para a interface de admin
                 from django.contrib.auth import login as auth_login
                 from django.contrib.auth.models import User
                 try:
-                    # Loga o usuário no sistema de admin do Django para dar acesso
                     django_user = User.objects.get(email=usuario.email)
                     auth_login(request, django_user)
                     messages.success(request, f'Bem-vindo(a), {usuario.nome}!')
-                    return redirect('/admin/') # URL do painel admin
+                    return redirect('/admin/')
                 except User.DoesNotExist:
-                    messages.error(request, 'Conta de administrador não sincronizada. Contate o suporte.')
+                    messages.error(request, 'Conta de administrador não sincronizada.')
                     return redirect('shivazen:usuarioLogin')
             else:
-                # Se for um cliente, redireciona para o painel do cliente
                 try:
                     cliente = Cliente.objects.get(email=usuario.email)
                     request.session['cliente_id'] = cliente.id_cliente
@@ -122,24 +111,21 @@ def usuarioLogin(request):
         else:
             messages.error(request, 'E-mail/CPF ou senha incorretos.')
             return redirect('shivazen:usuarioLogin')
-
     return render(request, 'usuario/login.html')
 
 def usuarioLogout(request):
     from django.contrib.auth import logout
-    logout(request) # Faz o logout do sistema de admin do Django
-    request.session.flush() # Limpa a sessão personalizada
+    logout(request)
+    request.session.flush()
     messages.info(request, 'Você saiu da sua conta.')
     return redirect('shivazen:inicio')
 
 def esqueciSenha(request):
     return render(request, 'usuario/esqueciSenha.html')
 
-
-# --- Área Restrita (Protegida por Login) ---
+# --- Área Restrita ---
 @login_required(login_url='/login/')
 def painel(request):
-    # Verifica se quem está acessando não é um admin para evitar acesso indevido
     if request.session.get('usuario_perfil') != 'Cliente':
         return redirect('/admin/')
     return render(request, 'telas/tela_painel.html')
@@ -147,9 +133,50 @@ def painel(request):
 @login_required(login_url='/login/')
 def agendaCadastro(request):
     if request.method == 'POST':
-        # (Lógica de POST do agendamento aqui...)
-        pass
-    
+        try:
+            id_cliente = request.session.get('cliente_id')
+            id_profissional = request.POST.get('profissional')
+            id_procedimento = request.POST.get('procedimento')
+            data_hora_str = request.POST.get('horario_selecionado')
+            
+            if not all([id_cliente, id_profissional, id_procedimento, data_hora_str]):
+                messages.error(request, 'Todos os campos são obrigatórios.')
+                return redirect('shivazen:agendaCadastro')
+
+            data_hora_inicio = datetime.fromisoformat(data_hora_str)
+            
+            cliente = Cliente.objects.get(pk=id_cliente)
+            profissional = Profissional.objects.get(pk=id_profissional)
+            procedimento = Procedimento.objects.get(pk=id_procedimento)
+
+            data_hora_fim = data_hora_inicio + timedelta(minutes=procedimento.duracao_minutos)
+
+            conflitos = Atendimento.objects.filter(
+                profissional=profissional,
+                data_hora_inicio__lt=data_hora_fim,
+                data_hora_fim__gt=data_hora_inicio,
+                status_atendimento__in=['AGENDADO', 'CONFIRMADO']
+            ).exists()
+
+            if conflitos:
+                messages.error(request, 'Este horário já foi agendado. Por favor, escolha outro.')
+                return redirect('shivazen:agendaCadastro')
+
+            Atendimento.objects.create(
+                cliente=cliente,
+                profissional=profissional,
+                procedimento=procedimento,
+                data_hora_inicio=data_hora_inicio,
+                data_hora_fim=data_hora_fim,
+                status_atendimento='AGENDADO'
+            )
+            messages.success(request, 'Seu agendamento foi realizado com sucesso!')
+            return redirect('shivazen:painel')
+
+        except Exception as e:
+            messages.error(request, f'Ocorreu um erro ao agendar: {e}')
+            return redirect('shivazen:agendaCadastro')
+
     profissionais = Profissional.objects.filter(ativo=True)
     context = {'profissionais': profissionais}
     return render(request, 'agenda/agendamento.html', context)
@@ -157,15 +184,59 @@ def agendaCadastro(request):
 # --- VIEWS AUXILIARES PARA AJAX ---
 @login_required(login_url='/login/')
 def buscar_procedimentos(request):
-    # (Código da view AJAX aqui...)
-    pass
+    if request.method == 'POST':
+        id_profissional = request.POST.get('id_profissional')
+        try:
+            profissional = Profissional.objects.get(pk=id_profissional)
+            procedimentos = profissional.procedimento_set.filter(ativo=True).values('id_procedimento', 'nome')
+            return JsonResponse(list(procedimentos), safe=False)
+        except Profissional.DoesNotExist:
+            return JsonResponse({'error': 'Profissional não encontrado'}, status=404)
+    return JsonResponse({'error': 'Requisição inválida'}, status=400)
 
 @login_required(login_url='/login/')
 def buscar_horarios(request):
-    # (Código da view AJAX aqui...)
-    pass
+    if request.method == 'POST':
+        id_profissional = request.POST.get('id_profissional')
+        data_selecionada_str = request.POST.get('data')
+        try:
+            data_selecionada = datetime.strptime(data_selecionada_str, '%Y-%m-%d').date()
+            dia_semana = data_selecionada.isoweekday() % 7 + 1 
+            profissional = Profissional.objects.get(pk=id_profissional)
+            disponibilidade = DisponibilidadeProfissional.objects.filter(profissional=profissional, dia_semana=dia_semana).first()
 
-# Manter estas views protegidas
+            if not disponibilidade:
+                return JsonResponse({'horarios': []})
+
+            agendamentos = Atendimento.objects.filter(profissional=profissional, data_hora_inicio__date=data_selecionada, status_atendimento__in=['AGENDADO', 'CONFIRMADO'])
+            bloqueios = BloqueioAgenda.objects.filter(profissional=profissional, data_hora_inicio__date__lte=data_selecionada, data_hora_fim__date__gte=data_selecionada)
+
+            horarios_disponiveis = []
+            hora_atual = datetime.combine(data_selecionada, disponibilidade.hora_inicio)
+            hora_fim_expediente = datetime.combine(data_selecionada, disponibilidade.hora_fim)
+
+            while hora_atual < hora_fim_expediente:
+                horario_ocupado = False
+                for ag in agendamentos:
+                    if hora_atual >= ag.data_hora_inicio and hora_atual < ag.data_hora_fim:
+                        horario_ocupado = True
+                        break
+                if not horario_ocupado:
+                    for bl in bloqueios:
+                        if hora_atual >= bl.data_hora_inicio and hora_atual < bl.data_hora_fim:
+                            horario_ocupado = True
+                            break
+                if not horario_ocupado:
+                    horarios_disponiveis.append(hora_atual.strftime('%H:%M'))
+                
+                hora_atual += timedelta(minutes=30)
+
+            return JsonResponse({'horarios': horarios_disponiveis})
+        except (Profissional.DoesNotExist, ValueError):
+            return JsonResponse({'error': 'Dados inválidos'}, status=400)
+    return JsonResponse({'error': 'Requisição inválida'}, status=400)
+
+# --- Telas Administrativas (Stubs) ---
 @login_required(login_url='/login/')
 def prontuarioconsentimento(request):
     return render(request, 'telas/ProntuarioConsentimento.html') 

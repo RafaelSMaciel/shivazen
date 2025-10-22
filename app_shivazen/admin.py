@@ -1,62 +1,57 @@
 # app_shivazen/admin.py
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .models import *
 
-# Personalização da listagem de Clientes
-@admin.register(Cliente)
-class ClienteAdmin(admin.ModelAdmin):
-    list_display = ('nome_completo', 'email', 'telefone', 'data_cadastro', 'ativo')
-    search_fields = ('nome_completo', 'cpf', 'email')
-    list_filter = ('ativo', 'data_cadastro')
-    list_per_page = 20
-
-# Personalização da listagem de Atendimentos
-@admin.register(Atendimento)
-class AtendimentoAdmin(admin.ModelAdmin):
-    list_display = ('id_atendimento', 'cliente', 'profissional', 'procedimento', 'data_hora_inicio', 'status_atendimento')
-    search_fields = ('cliente__nome_completo', 'profissional__nome')
-    list_filter = ('status_atendimento', 'data_hora_inicio', 'profissional', 'procedimento')
-    list_per_page = 20
-    autocomplete_fields = ['cliente', 'profissional', 'procedimento']
-
-# Personalização da listagem de Profissionais
-@admin.register(Profissional)
-class ProfissionalAdmin(admin.ModelAdmin):
-    list_display = ('nome', 'especialidade', 'ativo')
-    search_fields = ('nome', 'especialidade') # <-- CAMPO ADICIONADO PARA CORREÇÃO
-    list_filter = ('ativo',)
-
-# Personalização da listagem de Procedimentos
-@admin.register(Procedimento)
-class ProcedimentoAdmin(admin.ModelAdmin):
-    list_display = ('nome', 'duracao_minutos', 'ativo')
-    search_fields = ('nome',) # <-- CAMPO ADICIONADO PARA CORREÇÃO
-    list_filter = ('ativo',)
-
-# Personalização da listagem de Usuários do sistema
-@admin.register(Usuario)
-class UsuarioAdmin(admin.ModelAdmin):
-    list_display = ('nome', 'email', 'perfil', 'ativo')
-    search_fields = ('nome', 'email') # <-- CAMPO ADICIONADO PARA CORREÇÃO
-    list_filter = ('perfil', 'ativo')
-    autocomplete_fields = ['perfil', 'profissional']
-
-# Personalização para o Perfil (necessário para o autocomplete do UsuarioAdmin)
-@admin.register(Perfil)
-class PerfilAdmin(admin.ModelAdmin):
-    list_display = ('nome', 'descricao')
-    search_fields = ('nome',) # <-- CAMPO ADICIONADO PARA CORREÇÃO
-
-# Registro dos outros modelos (sem personalização avançada por enquanto)
+# Registros simples (para visualização padrão)
 admin.site.register(Funcionalidade)
-admin.site.register(DisponibilidadeProfissional)
-admin.site.register(BloqueioAgenda)
-admin.site.register(Preco)
+admin.site.register(Perfil)
+admin.site.register(PerfilFuncionalidade)
+admin.site.register(Profissional)
+admin.site.register(Cliente)
 admin.site.register(Prontuario)
 admin.site.register(ProntuarioPergunta)
+admin.site.register(Procedimento)
+admin.site.register(ProfissionalProcedimento)
+admin.site.register(Preco)
+admin.site.register(DisponibilidadeProfissional)
+admin.site.register(BloqueioAgenda)
+admin.site.register(Atendimento)
 admin.site.register(ProntuarioResposta)
 admin.site.register(Notificacao)
 admin.site.register(TermoConsentimento)
 admin.site.register(LogAuditoria)
-admin.site.register(PerfilFuncionalidade)
-admin.site.register(ProfissionalProcedimento)
+
+# --- CONFIGURAÇÃO CORRIGIDA PARA O ADMIN DE USUÁRIO ---
+# Substitua a classe UsuarioAdmin antiga por esta:
+
+@admin.register(Usuario) # Usa o decorator para registrar
+class UsuarioAdmin(BaseUserAdmin):
+    """
+    Define a visualização admin para o modelo de Usuário customizado.
+    """
+    
+    # Adiciona nossos campos customizados ('perfil', 'profissional') 
+    # ao formulário de edição no admin.
+    # (Copie os fieldsets padrão do BaseUserAdmin e adicione o seu)
+    fieldsets = BaseUserAdmin.fieldsets + (
+        ('Campos Customizados', {'fields': ('perfil', 'profissional')}),
+    )
+    add_fieldsets = BaseUserAdmin.add_fieldsets + (
+        ('Campos Customizados', {'fields': ('perfil', 'profissional')}),
+    )
+    
+    # --- CORREÇÃO DOS ERROS ---
+    # Substitui 'nome' por 'first_name' (ou 'get_full_name')
+    # Substitui 'ativo' por 'is_active' (padrão do Django)
+    list_display = ('email', 'first_name', 'perfil', 'is_active', 'is_staff')
+    
+    # Substitui 'ativo' por 'is_active'
+    list_filter = ('perfil', 'is_active', 'is_staff')
+    
+    # Substitui 'nome' por 'first_name', 'last_name'
+    search_fields = ('first_name', 'last_name', 'email')
+    ordering = ('email',)
+
+# Remova a linha antiga, pois o @admin.register(Usuario) já faz o registro:
+# admin.site.register(Usuario, UsuarioAdmin)

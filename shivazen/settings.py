@@ -2,25 +2,29 @@
 import os
 from pathlib import Path
 
-
-
-
-
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# --- Configuração de Segurança (Variáveis de Ambiente) ---
+# Em produção (Railway), crie variáveis de ambiente para estes valores.
+# O valor depois da vírgula é um 'default' para desenvolvimento local.
 
-STATIC_URL = '/static/'
+# ATENÇÃO: Troque o valor padrão da SECRET_KEY por um novo se desejar
+SECRET_KEY = os.environ.get(
+    'DJANGO_SECRET_KEY', 
+    'django-insecure-3zv0f3g^s$gtfqet^@+*ws5+kg_6x@ez_42x5vg7a$=2g*ru@j' # Mantenha a sua chave local aqui
+)
 
-# Pasta onde o Django procura seus arquivos estáticos durante o desenvolvimento
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'app_shivazen/static')
-]
+# Em produção, defina a variável de ambiente DEBUG=False
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-# Pasta para onde o Django vai copiar TODOS os arquivos estáticos para produção
-# Adicione esta linha:
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# Em produção, defina ALLOWED_HOSTS=seu-dominio.com,www.seu-dominio.com
+# O 'default' '*' é SÓ para desenvolvimento.
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
 
-# shivazen/settings.py
+
+# Application definition
+
 INSTALLED_APPS = [
     'jazzmin', 
     'app_shivazen',
@@ -32,17 +36,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
-
-
-SECRET_KEY = 'django-insecure-3zv0f3g^s$gtfqet^@+*ws5+kg_6x@ez_42x5vg7a$=2g*ru@j'
-
-DEBUG = True
-
-ALLOWED_HOSTS = ['*']
-
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', 
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -70,20 +66,24 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'shivazen.wsgi.application'
 
+
+# --- Banco de Dados com Variáveis de Ambiente ---
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'shivazen_prod',  # O nome que você deu ao seu banco de dados
-        'USER': 'postgres',      # Seu usuário do PostgreSQL
-        'PASSWORD': 'admin', # Sua senha do PostgreSQL
-        'HOST': 'localhost',     # Ou o endereço do seu servidor de banco de dados
-        'PORT': '5432',
+        'NAME': os.environ.get('DB_NAME', 'shivazen_prod'),
+        'USER': os.environ.get('DB_USER', 'postgres'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'admin'), 
+        'HOST': os.environ.get('DB_HOST', 'localhost'),
+        'PORT': os.environ.get('DB_PORT', '5432'),
         'OPTIONS': {
             'options': '-c search_path=shivazen_prod,shivazen_app'
         }
     }
 }
 
+
+# Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -91,16 +91,31 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
+
+# Internationalization
 LANGUAGE_CODE = 'pt-br'
 TIME_ZONE = 'America/Sao_Paulo'
 USE_I18N = True
 USE_TZ = True
 
+
+# --- Configurações de Arquivos Estáticos (WhiteNoise) ---
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'app_shivazen/static')]
 
+# Pasta para onde o 'collectstatic' vai copiar os arquivos
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') 
+
+# Adicionado: Armazenamento otimizado do WhiteNoise
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# --- Adicionado: Apontando para o novo Modelo de Usuário ---
+AUTH_USER_MODEL = 'app_shivazen.Usuario'
+
+# --- Configurações do JAZZMIN (Mantidas) ---
 JAZZMIN_SETTINGS = {
     "site_title": "Shiva Zen Admin",
     "site_header": "Shiva Zen",
@@ -116,7 +131,6 @@ JAZZMIN_SETTINGS = {
         {"model": "app_shivazen.Usuario", "name": "Usuários do Sistema"},
     ],
 
-    ############# NOVO: MENU LATERAL ORGANIZADO #############
     "navigation": [
         {"name": "PRINCIPAL", "icon": "fas fa-tachometer-alt"},
         {"name": "Agenda", "icon": "fas fa-calendar-alt", "models": [
@@ -137,22 +151,22 @@ JAZZMIN_SETTINGS = {
                 {"name": "Perfis de Acesso", "model": "app_shivazen.perfil", "icon": "fas fa-id-card"},
                 {"name": "Funcionalidades", "model": "app_shivazen.funcionalidade", "icon": "fas fa-key"},
                 {"name": "Logs de Auditoria", "model": "app_shivazen.logauditoria", "icon": "fas fa-history"},
-                {"name": "Usuários (Django Auth)", "model": "auth.user", "icon": "fas fa-user-lock"},
-                {"name": "Grupos (Django Auth)", "model": "auth.group", "icon": "fas fa-users"},
+                # Removidos 'auth.user' e 'auth.group' pois agora gerenciamos por 'app_shivazen.usuario'
             ]},
         ]},
     ],
-    #######################################################
-
-    # Ícones para apps que não estão no menu customizado (fallback)
+   
     "icons": {
         "auth": "fas fa-users-cog",
         "auth.user": "fas fa-user",
         "auth.Group": "fas fa-users",
+        # Adicione ícones para seu app se desejar
+        "app_shivazen.Usuario": "fas fa-user-shield",
+        "app_shivazen.Perfil": "fas fa-id-card",
+        # ...
     },
 }
 
-# Configurações de UI (pode manter as mesmas)
 JAZZMIN_UI_TWEAKS = {
     "theme": "flatly",
     "dark_theme": "darkly",

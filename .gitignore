@@ -1,5 +1,4 @@
 shivazen/app_shivazen/__pycache__/__init__.cpython-313.pyc
-
 shivazen/shivazen/__pycache__/wsgi.cpython-313.pyc
 shivazen/shivazen/__pycache__/urls.cpython-313.pyc
 shivazen/shivazen/__pycache__/settings.cpython-313.pyc
@@ -25,3 +24,4 @@ shivazen/app_shivazen/__pycache__/views.cpython-313.pyc
 shivazen/app_shivazen/__pycache__/urls.cpython-313.pyc
 shivazen/app_shivazen/__pycache__/models.cpython-313.pyc
 shivazen/app_shivazen/__pycache__/apps.cpython-313.pyc
+.env

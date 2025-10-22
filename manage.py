@@ -3,6 +3,11 @@
 import os
 import sys
 
+# --- ADICIONE ESSAS 3 LINHAS ---
+from dotenv import load_dotenv
+if os.path.exists('.env'):
+    load_dotenv('.env')
+# --- FIM DAS LINHAS ADICIONADAS ---
 
 def main():
     """Run administrative tasks."""
@@ -16,7 +21,6 @@ def main():
             "forget to activate a virtual environment?"
         ) from exc
     execute_from_command_line(sys.argv)
-
 
 if __name__ == '__main__':
     main()

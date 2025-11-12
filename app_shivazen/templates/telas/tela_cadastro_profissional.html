@@ -1,88 +1,255 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shivazen || Cadastrar </title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5d49f;
-      padding: 20px;
-    }
-    .container {
-      max-width: 600px;
-      background: #fff;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      margin: auto;
-    }
-    h2 {
-      text-align: center;
-      color: #4B3A9B;
-    }
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: bold;
-      color: #4B3A9B;
-    }
-    input, textarea, select {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 14px;
-    }
-    textarea {
-      resize: vertical;
-      height: 100px;
-    }
-    button {
-      margin-top: 20px;
-      width: 100%;
-      padding: 12px;
-      background-color: #E48A2A;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #d3791e;
-    }
-  </style>
-</head>
-<body>
+{% extends 'estrutura/base.html' %}
+{% load static %}
 
-  <div class="container">
-    <h2>Cadastro de Esteticista</h2>
-    <form action="/cadastrar-esteticista" method="POST">
-      <label for="nome">Nome Completo:</label>
-      <input type="text" id="nome" name="nome" required>
+{% block conteudo %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-user-md me-2"></i>Cadastro de Profissional</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" id="form-profissional">
+                        {% csrf_token %}
+                        
+                        <!-- Dados Básicos -->
+                        <div class="mb-4">
+                            <h5 class="border-bottom pb-2 mb-3">Dados Básicos</h5>
+                            <div class="row">
+                                <div class="col-md-8 mb-3">
+                                    <label for="nome" class="form-label">Nome Completo <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="nome" name="nome" required>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="especialidade" class="form-label">Especialidade</label>
+                                    <input type="text" class="form-control" id="especialidade" name="especialidade" placeholder="Ex: Esteticista Facial">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="ativo" name="ativo" checked>
+                                    <label class="form-check-label" for="ativo">
+                                        Profissional Ativo
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
 
-      <label for="contato">Número para Contato:</label>
-      <input type="tel" id="contato" name="contato" required placeholder="(XX) XXXXX-XXXX">
+                        <!-- Disponibilidade -->
+                        <div class="mb-4">
+                            <h5 class="border-bottom pb-2 mb-3">Disponibilidade Semanal</h5>
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Dia da Semana</th>
+                                            <th>Trabalha</th>
+                                            <th>Horário Início</th>
+                                            <th>Horário Fim</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>Segunda-feira</strong></td>
+                                            <td>
+                                                <div class="form-check">
+                                                    <input class="form-check-input trabalha-check" type="checkbox" 
+                                                           id="trabalha_segunda" name="trabalha_segunda" 
+                                                           data-dia="segunda">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <input type="time" class="form-control hora-input" 
+                                                       id="hora_inicio_segunda" name="hora_inicio_segunda" 
+                                                       data-dia="segunda" disabled>
+                                            </td>
+                                            <td>
+                                                <input type="time" class="form-control hora-input" 
+                                                       id="hora_fim_segunda" name="hora_fim_segunda" 
+                                                       data-dia="segunda" disabled>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Terça-feira</strong></td>
+                                            <td>
+                                                <div class="form-check">
+                                                    <input class="form-check-input trabalha-check" type="checkbox" 
+                                                           id="trabalha_terca" name="trabalha_terca" 
+                                                           data-dia="terca">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <input type="time" class="form-control hora-input" 
+                                                       id="hora_inicio_terca" name="hora_inicio_terca" 
+                                                       data-dia="terca" disabled>
+                                            </td>
+                                            <td>
+                                                <input type="time" class="form-control hora-input" 
+                                                       id="hora_fim_terca" name="hora_fim_terca" 
+                                                       data-dia="terca" disabled>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Quarta-feira</strong></td>
+                                            <td>
+                                                <div class="form-check">
+                                                    <input class="form-check-input trabalha-check" type="checkbox" 
+                                                           id="trabalha_quarta" name="trabalha_quarta" 
+                                                           data-dia="quarta">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <input type="time" class="form-control hora-input" 
+                                                       id="hora_inicio_quarta" name="hora_inicio_quarta" 
+                                                       data-dia="quarta" disabled>
+                                            </td>
+                                            <td>
+                                                <input type="time" class="form-control hora-input" 
+                                                       id="hora_fim_quarta" name="hora_fim_quarta" 
+                                                       data-dia="quarta" disabled>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Quinta-feira</strong></td>
+                                            <td>
+                                                <div class="form-check">
+                                                    <input class="form-check-input trabalha-check" type="checkbox" 
+                                                           id="trabalha_quinta" name="trabalha_quinta" 
+                                                           data-dia="quinta">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <input type="time" class="form-control hora-input" 
+                                                       id="hora_inicio_quinta" name="hora_inicio_quinta" 
+                                                       data-dia="quinta" disabled>
+                                            </td>
+                                            <td>
+                                                <input type="time" class="form-control hora-input" 
+                                                       id="hora_fim_quinta" name="hora_fim_quinta" 
+                                                       data-dia="quinta" disabled>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Sexta-feira</strong></td>
+                                            <td>
+                                                <div class="form-check">
+                                                    <input class="form-check-input trabalha-check" type="checkbox" 
+                                                           id="trabalha_sexta" name="trabalha_sexta" 
+                                                           data-dia="sexta">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <input type="time" class="form-control hora-input" 
+                                                       id="hora_inicio_sexta" name="hora_inicio_sexta" 
+                                                       data-dia="sexta" disabled>
+                                            </td>
+                                            <td>
+                                                <input type="time" class="form-control hora-input" 
+                                                       id="hora_fim_sexta" name="hora_fim_sexta" 
+                                                       data-dia="sexta" disabled>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Sábado</strong></td>
+                                            <td>
+                                                <div class="form-check">
+                                                    <input class="form-check-input trabalha-check" type="checkbox" 
+                                                           id="trabalha_sabado" name="trabalha_sabado" 
+                                                           data-dia="sabado">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <input type="time" class="form-control hora-input" 
+                                                       id="hora_inicio_sabado" name="hora_inicio_sabado" 
+                                                       data-dia="sabado" disabled>
+                                            </td>
+                                            <td>
+                                                <input type="time" class="form-control hora-input" 
+                                                       id="hora_fim_sabado" name="hora_fim_sabado" 
+                                                       data-dia="sabado" disabled>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Domingo</strong></td>
+                                            <td>
+                                                <div class="form-check">
+                                                    <input class="form-check-input trabalha-check" type="checkbox" 
+                                                           id="trabalha_domingo" name="trabalha_domingo" 
+                                                           data-dia="domingo">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <input type="time" class="form-control hora-input" 
+                                                       id="hora_inicio_domingo" name="hora_inicio_domingo" 
+                                                       data-dia="domingo" disabled>
+                                            </td>
+                                            <td>
+                                                <input type="time" class="form-control hora-input" 
+                                                       id="hora_fim_domingo" name="hora_fim_domingo" 
+                                                       data-dia="domingo" disabled>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
 
-      <label for="descricao">Descrição do Profissional:</label>
-      <textarea id="descricao" name="descricao" required></textarea>
+                        <!-- Procedimentos -->
+                        <div class="mb-4">
+                            <h5 class="border-bottom pb-2 mb-3">Procedimentos Realizados</h5>
+                            <div class="row">
+                                {% for procedimento in procedimentos %}
+                                <div class="col-md-4 mb-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" 
+                                               id="proc_{{ procedimento.id_procedimento }}" 
+                                               name="procedimentos" 
+                                               value="{{ procedimento.id_procedimento }}">
+                                        <label class="form-check-label" for="proc_{{ procedimento.id_procedimento }}">
+                                            {{ procedimento.nome }}
+                                        </label>
+                                    </div>
+                                </div>
+                                {% empty %}
+                                <div class="col-12">
+                                    <p class="text-muted">Nenhum procedimento cadastrado. <a href="/admin/app_shivazen/procedimento/add/">Cadastre um procedimento</a></p>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
 
-
-      <label for="disponibilidade">Disponibilidade:</label>
-      <select id="disponibilidade" name="disponibilidade" required>
-        <option value="">Selecione...</option>
-        <option value="Seg a Sex">Segunda a Sexta</option>
-        <option value="Fins de Semana">Fins de Semana</option>
-        <option value="Todos os Dias">Todos os Dias</option>
-        <option value="Outros">Outros</option>
-      </select>
-
-      <button type="submit">Cadastrar Esteticista</button>
+                        <!-- Botões -->
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'shivazen:adminDashboard' %}" class="btn btn-secondary">
+                                <i class="fas fa-times me-2"></i>Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Salvar Profissional
+                            </button>
+                        </div>
     </form>
+                </div>
+            </div>
+        </div>
+    </div>
   </div>
 
-</body>
-</html>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Habilita/desabilita campos de horário baseado no checkbox
+    document.querySelectorAll('.trabalha-check').forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+            const dia = this.dataset.dia;
+            const inputs = document.querySelectorAll(`.hora-input[data-dia="${dia}"]`);
+            inputs.forEach(function(input) {
+                input.disabled = !checkbox.checked;
+                if (!checkbox.checked) {
+                    input.value = '';
+                }
+            });
+        });
+    });
+});
+</script>
+{% endblock %}

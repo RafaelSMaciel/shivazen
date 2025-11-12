@@ -20,10 +20,18 @@ urlpatterns = [
 
     # --- Rotas da Área Restrita (Painel do Cliente/Admin) ---
     path('painel/', views.painel, name='painel'),
+    path('dashboard-admin/', views.adminDashboard, name='adminDashboard'),
     path('painel/agendamento/', views.agendaCadastro, name='agendaCadastro'),
     path('painel/prontuario/', views.prontuarioconsentimento, name='prontuarioconsentimento'),
     path('painel/cadastrar-profissional/', views.profissionalCadastro, name='profissionalCadastro'),
     path('painel/editar-profissional/', views.profissionalEditar, name='profissionalEditar'),
+    
+    # --- Rotas Administrativas ---
+    path('admin/agendamentos/', views.adminAgendamentos, name='adminAgendamentos'),
+    path('admin/procedimentos/', views.adminProcedimentos, name='adminProcedimentos'),
+    path('admin/bloqueios/', views.adminBloqueios, name='adminBloqueios'),
+    path('admin/bloqueios/criar/', views.criarBloqueio, name='criarBloqueio'),
+    path('admin/bloqueios/<int:bloqueio_id>/excluir/', views.excluirBloqueio, name='excluirBloqueio'),
 
     # --- Rotas para chamadas AJAX do agendamento ---
     path('ajax/buscar-procedimentos/', views.buscar_procedimentos, name='buscar_procedimentos'),

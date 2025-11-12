@@ -2,18 +2,20 @@
 .hero-section {
   position: relative;
   margin-bottom: 60px;
+  overflow: hidden;
 }
 
 .hero-image-container {
-  border-radius: 0 0 15px 15px;
+  border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
   overflow: hidden;
+  position: relative;
 }
 
 .hero-container {
   height: 43vh !important;
-  border-radius: 0 0 15px 15px;
+  border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
   overflow: hidden;
-  background-color: #e3ba77;
+  background: linear-gradient(135deg, #e3ba77 0%, var(--primary-color) 100%);
 }
 
 .hero-image {
@@ -21,6 +23,11 @@
   height: 70vh;
   object-fit: cover;
   object-position: center;
+  transition: transform var(--transition-slow);
+}
+
+.hero-image-container:hover .hero-image {
+  transform: scale(1.05);
 }
 
 .hero-overlay {
@@ -32,12 +39,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.3));
+  background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.4));
+  z-index: 1;
 }
 
 /* About Section */
 .about-section {
-  padding: 60px 0;
+  padding: var(--spacing-xl) 0;
+  position: relative;
 }
 
 .section-title {
@@ -45,6 +54,7 @@
   margin-bottom: 20px;
   position: relative;
   display: inline-block;
+  animation: fadeInUp 0.8s ease-out;
 }
 
 .section-title:after {
@@ -52,30 +62,55 @@
   display: block;
   width: 80px;
   height: 4px;
-  background-color: var(--primary-color);
+  background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
   margin: 15px auto 0;
+  border-radius: 2px;
+  animation: expandWidth 0.8s ease-out 0.3s both;
+}
+
+@keyframes expandWidth {
+  from {
+    width: 0;
+  }
+  to {
+    width: 80px;
+  }
+}
+
+.section-subtitle {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  margin-bottom: var(--spacing-md);
 }
 
 /* Gallery */
 .gallery-section {
-  padding: 40px 0;
+  padding: var(--spacing-xl) 0;
 }
 
 .gallery-card {
   position: relative;
   overflow: hidden;
   height: 350px;
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-base);
+}
+
+.gallery-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-5px);
 }
 
 .gallery-image {
   height: 100%;
   width: 100%;
   object-fit: cover;
-  transition: transform 0.5s ease;
+  transition: transform var(--transition-slow);
 }
 
 .gallery-card:hover .gallery-image {
-  transform: scale(1.1);
+  transform: scale(1.15);
 }
 
 .gallery-caption {
@@ -84,36 +119,89 @@
   left: 0;
   right: 0;
   padding: 25px;
-  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+  background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0.3), transparent);
   color: white;
   transform: translateY(100%);
-  transition: transform 0.3s ease;
+  transition: transform var(--transition-base);
+  z-index: 2;
 }
 
 .gallery-card:hover .gallery-caption {
   transform: translateY(0);
 }
 
+.gallery-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(180, 140, 76, 0.1);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+  z-index: 1;
+}
+
+.gallery-card:hover::before {
+  opacity: 1;
+}
+
 /* Tratamentos */
 .treatment-section {
-  padding: 60px 0;
+  padding: var(--spacing-xl) 0;
+  background: linear-gradient(to bottom, transparent, var(--secondary-color), transparent);
 }
 
 .treatment-card {
   padding: 30px;
   text-align: center;
   height: 100%;
+  transition: all var(--transition-base);
+  border-radius: var(--border-radius-md);
+}
+
+.treatment-card:hover {
+  background: white;
+  box-shadow: var(--shadow-md);
+  transform: translateY(-5px);
 }
 
 .treatment-icon {
   font-size: 2.5rem;
   color: var(--primary-color);
   margin-bottom: 20px;
+  transition: all var(--transition-base);
+  display: inline-block;
+}
+
+.treatment-card:hover .treatment-icon {
+  transform: scale(1.2) rotate(5deg);
+  color: var(--primary-dark);
 }
 
 /* Agendamento */
 .booking-container {
-  padding: 60px 0;
+  padding: var(--spacing-xl) 0;
+  background: linear-gradient(135deg, var(--background-light) 0%, var(--secondary-color) 100%);
+}
+
+.booking-title {
+  font-size: 2.5rem;
+  color: var(--primary-dark);
+  margin-bottom: var(--spacing-md);
+}
+
+.booking-card {
+  background: white;
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-base);
+  margin-bottom: var(--spacing-md);
+}
+
+.booking-card:hover {
+  box-shadow: var(--shadow-md);
 }
 
 .time-grid {
@@ -125,9 +213,13 @@
 .time-slot, .day-pill {
   padding: 12px;
   text-align: center;
-  border-radius: 8px;
+  border-radius: var(--border-radius-sm);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--transition-base);
+  font-weight: 500;
+  border: 2px solid transparent;
+  position: relative;
+  overflow: hidden;
 }
 
 .time-slot {
@@ -135,10 +227,44 @@
   color: var(--text-dark);
 }
 
+.time-slot::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s, height 0.4s;
+}
+
+.time-slot:hover::before {
+  width: 200px;
+  height: 200px;
+}
+
 .time-slot:hover, .time-slot.selected,
 .day-pill:hover, .day-pill.selected {
-  background-color: var(--primary-color);
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
   color: white;
+  border-color: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.time-slot.selected {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: var(--shadow-sm);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(180, 140, 76, 0.3);
+  }
 }
 
 /* Contato */
@@ -151,10 +277,35 @@
 .contact-card, .contact-form {
   padding: 40px;
   height: 100%;
+  background: white;
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-base);
+}
+
+.contact-card:hover, .contact-form:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
 }
 
 .info-item {
   margin-bottom: 20px;
+  padding: 15px;
+  border-radius: var(--border-radius-sm);
+  transition: all var(--transition-base);
+  border-left: 3px solid transparent;
+}
+
+.info-item:hover {
+  background-color: var(--secondary-color);
+  border-left-color: var(--primary-color);
+  padding-left: 20px;
+}
+
+.info-item i {
+  color: var(--primary-color);
+  margin-right: 10px;
+  font-size: 1.2rem;
 }
 
 /* cabecalho */
@@ -242,23 +393,91 @@
 .hero-content {
   max-width: 800px;
   padding: 0 2rem;
+  position: relative;
+  z-index: 2;
+  animation: fadeInUp 1s ease-out;
 }
 
 .hero-title {
   font-size: 3.5rem;
   color: white;
   margin-bottom: 1.5rem;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  animation: fadeInUp 1s ease-out 0.2s both;
 }
 
 .hero-subtitle {
   font-size: 1.5rem;
   color: white;
   margin-bottom: 2rem;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+  font-weight: 300;
+  animation: fadeInUp 1s ease-out 0.4s both;
 }
 
 .hero-actions {
   display: flex;
   justify-content: center;
+  gap: 1rem;
+  animation: fadeInUp 1s ease-out 0.6s both;
+  flex-wrap: wrap;
+}
+
+/* CTA Section */
+.cta-section {
+  padding: var(--spacing-xl) 0;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+  animation: rotate 20s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.cta-title {
+  font-size: 2.5rem;
+  color: white;
+  margin-bottom: var(--spacing-md);
+  position: relative;
+  z-index: 1;
+}
+
+.cta-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+
+.btn-light {
+  background: white;
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.btn-light:hover {
+  background: var(--background-light);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }

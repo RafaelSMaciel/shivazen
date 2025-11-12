@@ -1,0 +1,61 @@
+{% extends 'estrutura/base.html' %}
+{% load static %}
+
+{% block conteudo %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0"><i class="fas fa-calendar-times me-2"></i>Criar Bloqueio de Agenda</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="profissional" class="form-label">Profissional</label>
+                            <select name="profissional" id="profissional" class="form-select">
+                                <option value="">Todos os profissionais</option>
+                                {% for profissional in profissionais %}
+                                <option value="{{ profissional.id_profissional }}">{{ profissional.nome }}</option>
+                                {% endfor %}
+                            </select>
+                            <small class="form-text text-muted">Deixe em branco para bloquear todos os profissionais</small>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="data_hora_inicio" class="form-label">Data/Hora Início <span class="text-danger">*</span></label>
+                                <input type="datetime-local" name="data_hora_inicio" id="data_hora_inicio" 
+                                       class="form-control" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="data_hora_fim" class="form-label">Data/Hora Fim <span class="text-danger">*</span></label>
+                                <input type="datetime-local" name="data_hora_fim" id="data_hora_fim" 
+                                       class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="motivo" class="form-label">Motivo</label>
+                            <textarea name="motivo" id="motivo" class="form-control" rows="3" 
+                                      placeholder="Ex: Feriado, Manutenção, etc."></textarea>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'shivazen:adminBloqueios' %}" class="btn btn-secondary">
+                                <i class="fas fa-times me-2"></i>Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Salvar Bloqueio
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

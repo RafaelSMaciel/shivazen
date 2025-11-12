@@ -120,19 +120,24 @@ JAZZMIN_SETTINGS = {
     "site_title": "Shiva Zen Admin",
     "site_header": "Shiva Zen",
     "site_brand": "Shiva Zen Admin",
-    "login_logo": "assents/LogoCompletaSemFundo.png",
-    "site_logo": "assents/LogoSemFundo.png",
+    "login_logo": None,
+    "site_logo": None,
+    "login_logo_dark": None,
+    "site_logo_classes": "img-circle",
+    "site_icon": None,
     "welcome_sign": "Bem-vindo à Administração da Shiva Zen",
-    "copyright": "Shiva Zen Ltda",
+    "copyright": "Shiva Zen © 2024",
+    "search_model": ["app_shivazen.Cliente", "app_shivazen.Profissional", "app_shivazen.Atendimento"],
 
     # Links no topo
     "topmenu_links": [
-        {"name": "Voltar ao Site",  "url": "shivazen:inicio", "new_window": True},
-        {"model": "app_shivazen.Usuario", "name": "Usuários do Sistema"},
+        {"name": "Dashboard", "url": "shivazen:adminDashboard", "icon": "fas fa-tachometer-alt"},
+        {"name": "Voltar ao Site",  "url": "shivazen:inicio", "new_window": True, "icon": "fas fa-home"},
     ],
 
     "navigation": [
         {"name": "PRINCIPAL", "icon": "fas fa-tachometer-alt"},
+        {"name": "Dashboard", "url": "shivazen:adminDashboard", "icon": "fas fa-chart-line"},
         {"name": "Agenda", "icon": "fas fa-calendar-alt", "models": [
             {"model": "app_shivazen.atendimento", "label": "Ver Agendamentos", "icon": "fas fa-calendar-check"},
             {"model": "app_shivazen.disponibilidadeprofissional", "label": "Disponibilidades", "icon": "fas fa-clock"},
@@ -142,7 +147,7 @@ JAZZMIN_SETTINGS = {
             {"model": "app_shivazen.cliente", "label": "Clientes", "icon": "fas fa-address-book"},
             {"model": "app_shivazen.profissional", "label": "Profissionais", "icon": "fas fa-user-md"},
             {"model": "app_shivazen.procedimento", "label": "Procedimentos", "icon": "fas fa-spa"},
-            {"model": "app_shivazen.preco", "label": "Tabela de Preços"},
+            {"model": "app_shivazen.preco", "label": "Tabela de Preços", "icon": "fas fa-dollar-sign"},
         ]},
         {"name": "Configurações", "icon": "fas fa-cogs", "models": [
             {"name": "Perguntas do Prontuário", "model": "app_shivazen.prontuariopergunta", "icon": "fas fa-question-circle"},
@@ -151,7 +156,6 @@ JAZZMIN_SETTINGS = {
                 {"name": "Perfis de Acesso", "model": "app_shivazen.perfil", "icon": "fas fa-id-card"},
                 {"name": "Funcionalidades", "model": "app_shivazen.funcionalidade", "icon": "fas fa-key"},
                 {"name": "Logs de Auditoria", "model": "app_shivazen.logauditoria", "icon": "fas fa-history"},
-                # Removidos 'auth.user' e 'auth.group' pois agora gerenciamos por 'app_shivazen.usuario'
             ]},
         ]},
     ],
@@ -160,24 +164,69 @@ JAZZMIN_SETTINGS = {
         "auth": "fas fa-users-cog",
         "auth.user": "fas fa-user",
         "auth.Group": "fas fa-users",
-        # Adicione ícones para seu app se desejar
         "app_shivazen.Usuario": "fas fa-user-shield",
         "app_shivazen.Perfil": "fas fa-id-card",
-        # ...
+        "app_shivazen.Funcionalidade": "fas fa-key",
+        "app_shivazen.Cliente": "fas fa-address-book",
+        "app_shivazen.Profissional": "fas fa-user-md",
+        "app_shivazen.Procedimento": "fas fa-spa",
+        "app_shivazen.Preco": "fas fa-dollar-sign",
+        "app_shivazen.Atendimento": "fas fa-calendar-check",
+        "app_shivazen.DisponibilidadeProfissional": "fas fa-clock",
+        "app_shivazen.BloqueioAgenda": "fas fa-calendar-times",
+        "app_shivazen.Prontuario": "fas fa-file-medical",
+        "app_shivazen.ProntuarioPergunta": "fas fa-question-circle",
+        "app_shivazen.ProntuarioResposta": "fas fa-check-circle",
+        "app_shivazen.TermoConsentimento": "fas fa-file-signature",
+        "app_shivazen.Notificacao": "fas fa-bell",
+        "app_shivazen.LogAuditoria": "fas fa-history",
     },
+    
+    "default_icon_parents": "fas fa-chevron-circle-right",
+    "default_icon_children": "fas fa-circle",
+    
+    "related_modal_active": True,
+    "custom_css": None,
+    "custom_js": None,
+    "use_google_fonts_cdn": True,
+    "show_ui_builder": False,
+    "changeform_format": "horizontal_tabs",
+    "changeform_format_overrides": {
+        "app_shivazen.usuario": "collapsible",
+        "app_shivazen.atendimento": "collapsible",
+    },
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    "hide_apps": [],
+    "hide_models": [],
+    "order_with_respect_to": ["app_shivazen"],
 }
 
 JAZZMIN_UI_TWEAKS = {
-    "theme": "flatly",
+    "theme": "lux",
     "dark_theme": "darkly",
-    "brand_colour": "#8b5c00",
-    "accent": "#b48c4c",
-    "navbar": "navbar-white navbar-light",
+    "brand_colour": "#E48A2A",
+    "accent": "accent-primary",
+    "navbar": "navbar-dark",
     "navbar_fixed": True,
     "sidebar_fixed": True,
     "sidebar": "sidebar-dark-primary",
     "sidebar_nav_child_indent": True,
-    "sidebar_nav_compact_style": True,
+    "sidebar_nav_compact_style": False,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": False,
     "actions_sticky_top": True,
-    "theme_switcher": True
+    "theme_switcher": True,
+    "navbar_small_text": False,
+    "footer_small_text": False,
+    "body_small_text": False,
+    "brand_small_text": False,
+    "button_classes": {
+        "primary": "btn-primary",
+        "secondary": "btn-secondary",
+        "info": "btn-info",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-success"
+    }
 }

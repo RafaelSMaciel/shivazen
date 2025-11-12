@@ -1,0 +1,108 @@
+{% extends 'estrutura/base.html' %}
+{% load static %}
+
+{% block conteudo %}
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="booking-title mb-0">Gestão de Agendamentos</h2>
+        <a href="{% url 'shivazen:adminDashboard' %}" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left me-2"></i>Voltar ao Dashboard
+        </a>
+    </div>
+
+    <!-- Filtros -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="GET" class="row g-3">
+                <div class="col-md-4">
+                    <label for="status" class="form-label">Status</label>
+                    <select name="status" id="status" class="form-select">
+                        <option value="">Todos</option>
+                        <option value="AGENDADO" {% if status_filter == 'AGENDADO' %}selected{% endif %}>Agendado</option>
+                        <option value="CONFIRMADO" {% if status_filter == 'CONFIRMADO' %}selected{% endif %}>Confirmado</option>
+                        <option value="REALIZADO" {% if status_filter == 'REALIZADO' %}selected{% endif %}>Realizado</option>
+                        <option value="CANCELADO" {% if status_filter == 'CANCELADO' %}selected{% endif %}>Cancelado</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="data" class="form-label">Data</label>
+                    <input type="date" name="data" id="data" class="form-control" value="{{ data_filter }}">
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary me-2">
+                        <i class="fas fa-search me-2"></i>Filtrar
+                    </button>
+                    <a href="{% url 'shivazen:adminAgendamentos' %}" class="btn btn-secondary">
+                        <i class="fas fa-times me-2"></i>Limpar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Tabela de Agendamentos -->
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="fas fa-calendar-check me-2"></i>Agendamentos</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Data/Hora</th>
+                            <th>Cliente</th>
+                            <th>Profissional</th>
+                            <th>Procedimento</th>
+                            <th>Status</th>
+                            <th>Valor</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for agendamento in agendamentos %}
+                        <tr>
+                            <td>{{ agendamento.data_hora_inicio|date:"d/m/Y H:i" }}</td>
+                            <td>{{ agendamento.cliente.nome_completo }}</td>
+                            <td>{{ agendamento.profissional.nome }}</td>
+                            <td>{{ agendamento.procedimento.nome }}</td>
+                            <td>
+                                {% if agendamento.status_atendimento == 'AGENDADO' %}
+                                    <span class="badge bg-warning">Agendado</span>
+                                {% elif agendamento.status_atendimento == 'CONFIRMADO' %}
+                                    <span class="badge bg-info">Confirmado</span>
+                                {% elif agendamento.status_atendimento == 'REALIZADO' %}
+                                    <span class="badge bg-success">Realizado</span>
+                                {% elif agendamento.status_atendimento == 'CANCELADO' %}
+                                    <span class="badge bg-danger">Cancelado</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">{{ agendamento.status_atendimento }}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if agendamento.valor_cobrado %}
+                                    R$ {{ agendamento.valor_cobrado|floatformat:2 }}
+                                {% else %}
+                                    <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="/admin/app_shivazen/atendimento/{{ agendamento.id_atendimento }}/change/" 
+                                   class="btn btn-sm btn-outline-primary" title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center text-muted">Nenhum agendamento encontrado.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

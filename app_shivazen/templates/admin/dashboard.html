@@ -1,0 +1,444 @@
+{% extends 'estrutura/base.html' %}
+{% load static %}
+
+{% block conteudo %}
+<div class="admin-dashboard">
+    <!-- Header do Dashboard -->
+    <div class="dashboard-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center py-4">
+                <div>
+                    <h1 class="dashboard-title mb-2">
+                        <i class="fas fa-tachometer-alt me-2"></i>Dashboard Administrativo
+                    </h1>
+                    <p class="text-muted mb-0">Bem-vindo, {{ user.first_name|default:user.email }}!</p>
+                </div>
+                <div class="dashboard-actions">
+                    <a href="/admin/" class="btn btn-outline me-2" target="_blank">
+                        <i class="fas fa-cog me-2"></i>Admin Django
+                    </a>
+                    <a href="{% url 'shivazen:inicio' %}" class="btn btn-outline">
+                        <i class="fas fa-home me-2"></i>Voltar ao Site
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-4">
+        <!-- Ações Rápidas -->
+        <div class="row g-3 mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-bolt me-2"></i>Ações Rápidas</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-3 col-sm-6">
+                                <a href="{% url 'shivazen:adminAgendamentos' %}" class="btn btn-outline-primary w-100">
+                                    <i class="fas fa-calendar-check me-2"></i>Ver Agendamentos
+                                </a>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <a href="{% url 'shivazen:adminProcedimentos' %}" class="btn btn-outline-primary w-100">
+                                    <i class="fas fa-spa me-2"></i>Procedimentos
+                                </a>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <a href="{% url 'shivazen:adminBloqueios' %}" class="btn btn-outline-warning w-100">
+                                    <i class="fas fa-calendar-times me-2"></i>Bloqueios
+                                </a>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <a href="{% url 'shivazen:profissionalCadastro' %}" class="btn btn-outline-success w-100">
+                                    <i class="fas fa-user-plus me-2"></i>Novo Profissional
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cards de Estatísticas -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-3 col-sm-6">
+                <div class="stat-card">
+                    <div class="stat-icon bg-primary">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-number">{{ total_clientes }}</h3>
+                        <p class="stat-label">Clientes Ativos</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 col-sm-6">
+                <div class="stat-card">
+                    <div class="stat-icon bg-success">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-number">{{ total_profissionais }}</h3>
+                        <p class="stat-label">Profissionais</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 col-sm-6">
+                <div class="stat-card">
+                    <div class="stat-icon bg-info">
+                        <i class="fas fa-spa"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-number">{{ total_procedimentos }}</h3>
+                        <p class="stat-label">Procedimentos</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 col-sm-6">
+                <div class="stat-card">
+                    <div class="stat-icon bg-warning">
+                        <i class="fas fa-calendar-day"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-number">{{ agendamentos_hoje }}</h3>
+                        <p class="stat-label">Agendamentos Hoje</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Segunda Linha de Estatísticas -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-3 col-sm-6">
+                <div class="stat-card">
+                    <div class="stat-icon bg-danger">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-number">{{ agendamentos_mes }}</h3>
+                        <p class="stat-label">Agendamentos do Mês</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 col-sm-6">
+                <div class="stat-card">
+                    <div class="stat-icon bg-secondary">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-number">{{ agendamentos_pendentes }}</h3>
+                        <p class="stat-label">Pendentes</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 col-sm-6">
+                <div class="stat-card">
+                    <div class="stat-icon bg-success">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-number">{{ agendamentos_confirmados }}</h3>
+                        <p class="stat-label">Confirmados</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 col-sm-6">
+                <div class="stat-card">
+                    <div class="stat-icon bg-primary">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-number">R$ {{ receita_mes|floatformat:2 }}</h3>
+                        <p class="stat-label">Receita do Mês</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gráficos e Tabelas -->
+        <div class="row g-4 mb-5">
+            <!-- Gráfico de Agendamentos por Dia da Semana -->
+            <div class="col-lg-6">
+                <div class="dashboard-card">
+                    <div class="card-header-custom">
+                        <h3 class="card-title">
+                            <i class="fas fa-chart-bar me-2"></i>Agendamentos por Dia da Semana
+                        </h3>
+                        <p class="card-subtitle">Últimos 30 dias</p>
+                    </div>
+                    <div class="card-body-custom">
+                        <canvas id="graficoSemana" height="250"></canvas>
+                        <script type="application/json" id="dados-semana">
+                            {{ dados_grafico_semana|safe }}
+                        </script>
+                        <script type="application/json" id="labels-semana">
+                            {{ dias_semana|safe }}
+                        </script>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Agendamentos por Status -->
+            <div class="col-lg-6">
+                <div class="dashboard-card">
+                    <div class="card-header-custom">
+                        <h3 class="card-title">
+                            <i class="fas fa-pie-chart me-2"></i>Agendamentos por Status
+                        </h3>
+                    </div>
+                    <div class="card-body-custom">
+                        <canvas id="graficoStatus" height="250"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabelas de Informações -->
+        <div class="row g-4 mb-5">
+            <!-- Agendamentos Recentes -->
+            <div class="col-lg-8">
+                <div class="dashboard-card">
+                    <div class="card-header-custom">
+                        <h3 class="card-title">
+                            <i class="fas fa-history me-2"></i>Agendamentos Recentes
+                        </h3>
+                    </div>
+                    <div class="card-body-custom">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Data/Hora</th>
+                                        <th>Cliente</th>
+                                        <th>Profissional</th>
+                                        <th>Procedimento</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for agendamento in agendamentos_recentes %}
+                                    <tr>
+                                        <td>
+                                            <strong>{{ agendamento.data_hora_inicio|date:"d/m/Y" }}</strong><br>
+                                            <small class="text-muted">{{ agendamento.data_hora_inicio|date:"H:i" }}</small>
+                                        </td>
+                                        <td>{{ agendamento.cliente.nome_completo }}</td>
+                                        <td>{{ agendamento.profissional.nome }}</td>
+                                        <td>{{ agendamento.procedimento.nome }}</td>
+                                        <td>
+                                            <span class="badge status-badge status-{{ agendamento.status_atendimento|lower }}">
+                                                {{ agendamento.status_atendimento }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted">Nenhum agendamento encontrado</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Próximos Agendamentos -->
+            <div class="col-lg-4">
+                <div class="dashboard-card">
+                    <div class="card-header-custom">
+                        <h3 class="card-title">
+                            <i class="fas fa-calendar-check me-2"></i>Próximos Agendamentos
+                        </h3>
+                        <p class="card-subtitle">Próximos 7 dias</p>
+                    </div>
+                    <div class="card-body-custom">
+                        <div class="upcoming-list">
+                            {% for agendamento in agendamentos_proximos %}
+                            <div class="upcoming-item">
+                                <div class="upcoming-date">
+                                    <strong>{{ agendamento.data_hora_inicio|date:"d/m" }}</strong>
+                                    <small>{{ agendamento.data_hora_inicio|date:"H:i" }}</small>
+                                </div>
+                                <div class="upcoming-info">
+                                    <strong>{{ agendamento.cliente.nome_completo|truncatewords:2 }}</strong>
+                                    <small>{{ agendamento.procedimento.nome|truncatewords:3 }}</small>
+                                </div>
+                            </div>
+                            {% empty %}
+                            <p class="text-center text-muted">Nenhum agendamento nos próximos dias</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rankings -->
+        <div class="row g-4">
+            <!-- Profissionais Mais Ocupados -->
+            <div class="col-lg-6">
+                <div class="dashboard-card">
+                    <div class="card-header-custom">
+                        <h3 class="card-title">
+                            <i class="fas fa-trophy me-2"></i>Profissionais Mais Ocupados
+                        </h3>
+                    </div>
+                    <div class="card-body-custom">
+                        <div class="ranking-list">
+                            {% for prof in profissionais_ocupados %}
+                            <div class="ranking-item">
+                                <div class="ranking-position">{{ forloop.counter }}</div>
+                                <div class="ranking-info">
+                                    <strong>{{ prof.nome }}</strong>
+                                    <small>{{ prof.especialidade|default:"Sem especialidade" }}</small>
+                                </div>
+                                <div class="ranking-value">
+                                    <span class="badge bg-primary">{{ prof.total_agendamentos }} agendamentos</span>
+                                </div>
+                            </div>
+                            {% empty %}
+                            <p class="text-center text-muted">Nenhum profissional encontrado</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Procedimentos Mais Populares -->
+            <div class="col-lg-6">
+                <div class="dashboard-card">
+                    <div class="card-header-custom">
+                        <h3 class="card-title">
+                            <i class="fas fa-star me-2"></i>Procedimentos Mais Populares
+                        </h3>
+                    </div>
+                    <div class="card-body-custom">
+                        <div class="ranking-list">
+                            {% for proc in procedimentos_populares %}
+                            <div class="ranking-item">
+                                <div class="ranking-position">{{ forloop.counter }}</div>
+                                <div class="ranking-info">
+                                    <strong>{{ proc.nome }}</strong>
+                                    <small>{{ proc.duracao_minutos }} minutos</small>
+                                </div>
+                                <div class="ranking-value">
+                                    <span class="badge bg-success">{{ proc.total_agendamentos }} agendamentos</span>
+                                </div>
+                            </div>
+                            {% empty %}
+                            <p class="text-center text-muted">Nenhum procedimento encontrado</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Gráfico de Agendamentos por Dia da Semana
+    const ctxSemana = document.getElementById('graficoSemana');
+    if (ctxSemana) {
+        const dadosSemanaEl = document.getElementById('dados-semana');
+        const labelsSemanaEl = document.getElementById('labels-semana');
+        const dadosSemana = dadosSemanaEl ? JSON.parse(dadosSemanaEl.textContent) : [];
+        const labelsSemana = labelsSemanaEl ? JSON.parse(labelsSemanaEl.textContent) : [];
+        
+        new Chart(ctxSemana, {
+            type: 'bar',
+            data: {
+                labels: labelsSemana,
+                datasets: [{
+                    label: 'Agendamentos',
+                    data: dadosSemana,
+                    backgroundColor: 'rgba(180, 140, 76, 0.8)',
+                    borderColor: 'rgba(139, 92, 0, 1)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Gráfico de Agendamentos por Status
+    const ctxStatus = document.getElementById('graficoStatus');
+    if (ctxStatus) {
+        const statusLabels = [
+            {% for item in agendamentos_por_status %}
+            '{{ item.status_atendimento }}'{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ];
+        const statusValues = [
+            {% for item in agendamentos_por_status %}
+            {{ item.total }}{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ];
+        
+        new Chart(ctxStatus, {
+            type: 'doughnut',
+            data: {
+                labels: statusLabels,
+                datasets: [{
+                    data: statusValues,
+                    backgroundColor: [
+                        'rgba(180, 140, 76, 0.8)',
+                        'rgba(40, 167, 69, 0.8)',
+                        'rgba(220, 53, 69, 0.8)',
+                        'rgba(255, 193, 7, 0.8)',
+                        'rgba(23, 162, 184, 0.8)',
+                    ],
+                    borderColor: [
+                        'rgba(139, 92, 0, 1)',
+                        'rgba(40, 167, 69, 1)',
+                        'rgba(220, 53, 69, 1)',
+                        'rgba(255, 193, 7, 1)',
+                        'rgba(23, 162, 184, 1)',
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    }
+});
+</script>
+{% endblock %}
+

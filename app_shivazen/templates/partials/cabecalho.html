@@ -1,60 +1,68 @@
 {% load static %} 
-<header class="header-container fixed-top">
+<header class="header-container fixed-top" role="banner">
     <div class="container d-flex align-items-center justify-content-between cabecalho">
         <div class="logo">
-            <a href="{% url 'shivazen:inicio' %}">
+            <a href="{% url 'shivazen:inicio' %}" aria-label="Página inicial Shiva Zen">
                 <img src="{% static 'assents/LogoSemFundo.png' %}" alt="Logo Shiva Zen" class="img-fluid header-logo">
             </a>
         </div>
         
-        <nav class="d-none d-md-flex align-items-center">
+        <nav class="d-none d-md-flex align-items-center" aria-label="Navegação principal">
             <ul class="navbar-nav d-flex flex-row align-items-center gap-4 mb-0">
                 {% if request.session.usuario_id %}
                     <li class="nav-item">
-                        <span class="nav-link">Olá, {{ request.session.usuario_nome }}!</span>
+                        <span class="nav-link" aria-label="Usuário logado">Olá, {{ request.session.usuario_nome }}!</span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'shivazen:painel' %}">Meu Painel</a>
+                        <a class="nav-link" href="{% url 'shivazen:painel' %}" aria-label="Acessar meu painel">Meu Painel</a>
                     </li>
                     <li class="nav-item ms-3">
-                        <a class="btn btn-icon" href="{% url 'shivazen:usuarioLogout' %}" title="Sair">
-                            <i class="fas fa-sign-out-alt"></i>
+                        <a class="btn btn-icon" href="{% url 'shivazen:usuarioLogout' %}" title="Sair" aria-label="Sair da conta">
+                            <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
                         </a>
                     </li>
                 {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'shivazen:usuarioLogin' %}">Área do Paciente</a>
+                        <a class="nav-link" href="{% url 'shivazen:usuarioLogin' %}" aria-label="Acessar área do paciente">Área do Paciente</a>
                     </li>
                     <li class="nav-item ms-3">
-                        <a class="btn btn-icon" href="{% url 'shivazen:usuarioLogin' %}" title="Login">
-                            <i class="fas fa-user-circle"></i>
+                        <a class="btn btn-icon" href="{% url 'shivazen:usuarioLogin' %}" title="Login" aria-label="Fazer login">
+                            <i class="fas fa-user-circle" aria-hidden="true"></i>
                         </a>
                     </li>
                 {% endif %}
             </ul>
         </nav>
         
-        <button class="navbar-toggler d-md-none p-2" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><i class="fas fa-bars fs-4"></i></button>
+        <button class="navbar-toggler d-md-none p-2" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu" aria-controls="mobileMenu" aria-expanded="false" aria-label="Toggle navigation menu">
+            <i class="fas fa-bars fs-4" aria-hidden="true"></i>
+        </button>
     </div>
     
     <div class="collapse navbar-collapse d-md-none mobile-menu-container" id="mobileMenu">
-        <ul class="navbar-nav d-flex flex-column gap-3 py-3">
-             {% if request.session.usuario_id %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'shivazen:painel' %}">Meu Painel</a>
-                </li>
-                <li class="nav-item mt-2">
-                    <a class="btn btn-outline w-100" href="{% url 'shivazen:usuarioLogout' %}"><i class="fas fa-sign-out-alt me-2"></i> SAIR</a>
-                </li>
-             {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'shivazen:usuarioLogin' %}">Área do Paciente</a>
-                </li>
-                <li class="nav-item mt-2">
-                    <a class="btn btn-outline w-100" href="{% url 'shivazen:usuarioLogin' %}"><i class="fas fa-user-circle me-2"></i> LOGIN</a>
-                </li>
-             {% endif %}
-        </ul>
+        <nav aria-label="Menu mobile">
+            <ul class="navbar-nav d-flex flex-column gap-3 py-3">
+                 {% if request.session.usuario_id %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'shivazen:painel' %}" aria-label="Acessar meu painel">Meu Painel</a>
+                    </li>
+                    <li class="nav-item mt-2">
+                        <a class="btn btn-outline w-100" href="{% url 'shivazen:usuarioLogout' %}" aria-label="Sair da conta">
+                            <i class="fas fa-sign-out-alt me-2" aria-hidden="true"></i> SAIR
+                        </a>
+                    </li>
+                 {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'shivazen:usuarioLogin' %}" aria-label="Acessar área do paciente">Área do Paciente</a>
+                    </li>
+                    <li class="nav-item mt-2">
+                        <a class="btn btn-outline w-100" href="{% url 'shivazen:usuarioLogin' %}" aria-label="Fazer login">
+                            <i class="fas fa-user-circle me-2" aria-hidden="true"></i> LOGIN
+                        </a>
+                    </li>
+                 {% endif %}
+            </ul>
+        </nav>
     </div>
 </header>
-<div class="header-spacer"></div>
+<div class="header-spacer" aria-hidden="true"></div>
